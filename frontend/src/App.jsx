@@ -1,15 +1,28 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./page/Home";
-import "./App.css";
-import AppRoutes from "./Routes/AppRoutes";
-import Admin from "./admin/Admin";
+import React from 'react'
+import Navbar from './components/Navbar/Navbar'
+import Home from './components/home/home'
+import Search from './components/search/search'
+import Support from './components/support/support'
+import Info from './components/info/info'
+import Lounge from './components/lounge/lounge'
+import Travelers from './components/travelers/travelers'
+import Subscribe from './components/subscribers/subscribe'
+import Footer from './components/footer/footer'
 
-function App() {
+const App = () => {
   return (
-    <Router>
-      <AppRoutes />
-    </Router>
-  );
+    <div>
+      <Navbar />
+      <Home />
+      <Search />
+      <Support />
+      <Info />
+      {/* <Lounge />
+      <Travelers />
+      <Subscribe />
+      <Footer /> */}
+    </div>
+  )
 }
 
-export default App;
+export default App

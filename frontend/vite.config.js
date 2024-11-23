@@ -1,13 +1,15 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
-// https://vitejs.dev/config/
+// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  build: {
-    // ... other build options
-    rollupOptions: {
-      external: ["@babel/runtime/helpers/*"],
+  css: {
+    preprocessorOptions: {
+      scss: {
+        sourceMap: true, // Kích hoạt source map
+      },
     },
   },
-});
+  assetsInclude: ['**/*.mp4', '**/*.png'],
+})

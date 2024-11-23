@@ -1,83 +1,81 @@
-import React, { useState, useContext } from "react";
-import { RxHamburgerMenu } from "react-icons/rx";
-import { Link } from "react-router-dom";
-import { authContext } from "../../context/authContext";
+import React, {useState} from "react"
 
-function Navbar() {
-  const isAdmin = true ? localStorage.getItem("isAdmin") === "true" : false;
-  console.log(isAdmin);
+import { SiConsul } from 'react-icons/si'
+import { BsPhoneVibrate } from 'react-icons/bs'
+import { AiOutlineGlobal } from 'react-icons/ai'
+import { CgMenuGridO } from 'react-icons/cg'
 
-  const isUserLoggedIn = true
-    ? localStorage.getItem("token") !== "null"
-    : false;
-  console.log(isUserLoggedIn);
+import logo from '../../assets/logo.png'
 
-  const { user, token } = useContext(authContext);
-  const [menuOpen, setMenuOpen] = useState(false);
+const Navbar = () => {
+    // Remove the navbar in the small width screens
+    const [active, setActive] = useState('navBarMenu');
+    const showNavBar = () => {
+        setActive('navBarMenu showNavBar');
+    };
 
-  const userData = JSON.parse(localStorage.getItem("user"));
+    const removeNavBar = () => {
+        setActive('navBarMenu');
+    };
 
-  const profilePic =
-    "https://cdn.pixabay.com/photo/2018/11/13/21/43/avatar-3814049_1280.png";
+    // Add a background color to the second NavBar
+    const [noBg, addBg] = useState('navBarTwo');
+    const addBgColor = () => {
+        if(window.scrollY >= 10) {
+            addBg('navBarTwo navbar_With_Bg');
+        } else {
+            addBg('navBarTwo');
+        }
+    }
+    window.addEventListener('scroll', addBgColor);
+    
+    return (
+        <div className="navBar flex">
+            <div className="navBarOne flex">
+                <div>
+                    <SiConsul className="icon" />
+                </div>
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+                <div className="none flex">
+                    <li className="flex"><BsPhoneVibrate className="icon" />Support</li>
+                    <li className="flex"><AiOutlineGlobal className="icon" />Languages</li>
+                </div>
 
-  return (
-    <header className="bg-white px-[30px] md:px-[30px]">
-      <nav className="flex justify-between items-center w-full max-w-[1800px] mx-auto mt-5 z-[10]">
-        <Link to={"/"}>
-          <div className="font-bold text-3xl">ABVS</div>
-        </Link>
-        <div
-          className={`nav-links duration-500 md:static absolute bg-white md:min-h-fit min-h-[60vh] left-0 ${
-            menuOpen ? "top-[8%]" : "top-[-100%]"
-          } md:w-auto w-full flex items-center px-5 z-[10]`}
-        >
-          <ul className="flex md:flex-row flex-col md:items-center md:gap-[4vw] gap-8">
-            <li>
-              <Link to={"/search"} className="hover:text-gray-500" href="#">
-                Search Flights
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-gray-500" href="#">
-                Search hotels
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-gray-500" href="#">
-                Contact us
-              </Link>
-            </li>
-          </ul>
+                <div className="atb flex">
+                    <span>Sign In</span>
+                    <span>Sign Up</span>
+                </div>
+            </div>
+
+            <div className={noBg}>
+                <div className="logoDiv">
+                    <img src={logo} alt="" className="Logo" />
+                </div>
+
+                <div className={active}>
+                    <ul className="menu flex">
+                        <li onClick={removeNavBar} className="listItem">Home</li>
+                        <li onClick={removeNavBar} className="listItem">About</li>
+                        <li onClick={removeNavBar} className="listItem">Offers</li>
+                        <li onClick={removeNavBar} className="listItem">Seats</li>
+                        <li onClick={removeNavBar} className="listItem">Destinations</li>
+                    </ul>
+
+                    <button onClick={removeNavBar} className="btn flex btnOne">
+                        Contact
+                    </button>
+                </div>
+
+                <button className="btn flex btnTwo">
+                    Contact
+                </button>
+
+                <div onClick={showNavBar} className="toggleIcon">
+                    <CgMenuGridO className="icon"/>
+                </div>
+            </div>
         </div>
-        <div className="flex items-center gap-6">
-          {isUserLoggedIn ? (
-            <Link to={isAdmin ? "/admin" : "/profile"}>
-              <img
-                src={profilePic}
-                alt=""
-                className="w-[50px] h-[50px] rounded-full"
-              />
-            </Link>
-          ) : (
-            <Link to={"/login"}>
-              <button className="bg-[#a6c1ee] text-white px-5 py-2 rounded-full hover:bg-[#87acec]">
-                Sign in
-              </button>
-            </Link>
-          )}
-          <RxHamburgerMenu
-            onClick={toggleMenu}
-            name={menuOpen ? "close" : "menu"}
-            className="text-3xl cursor-pointer md:hidden"
-          />
-        </div>
-      </nav>
-    </header>
-  );
+    )
 }
 
-export default Navbar;
+export default Navbar
