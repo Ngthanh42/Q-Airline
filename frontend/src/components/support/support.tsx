@@ -1,12 +1,11 @@
-import React, {useEffect} from "react"
-import gridImage from "../../assets/Image-Grid.jpg"
+import React, { useEffect } from "react"
 
 import Aos from "aos"
 import "aos/dist/aos.css"
 
 const Support = () => {
     useEffect(() => {
-        Aos.init({duration: 2000})
+        Aos.init({ duration: 2000 })
     }, []);
 
     return (
@@ -44,7 +43,9 @@ const Support = () => {
                     </div>
 
                     <div data-aos='fade-up' data-aos-duration='2500' className="imgDiv">
-                        <img src={gridImage} alt="" />
+                        <img src="/windows-plane-1.jpg" alt="Windows travel 1" className="imgOne" />
+                        <img src="/windows-plane-2.jpg" alt="Windows travel 2" className="imgTwo" />
+                        <img src="/windows-plane-3.jpg" alt="Windows travel 3" className="imgThree" />
                     </div>
                 </div>
             </div>

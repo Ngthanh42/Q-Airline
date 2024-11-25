@@ -3,8 +3,6 @@ import React, {useEffect} from "react"
 import {TiSocialFacebook,} from "react-icons/ti"
 import {AiOutlineTwitter, AiFillYoutube, AiFillGoogleCircle} from "react-icons/ai"
 
-import logo from '../../assets/logo.png'
-
 import Aos from "aos"
 import "aos/dist/aos.css"
 
@@ -18,7 +16,7 @@ const Footer = () => {
             <div className="sectionContainer container grid">
                 <div data-aos='fade-up' data-aos-duration='2500' className="gridOne">
                     <div className="logoDiv">
-                        <img src={logo} alt="" className="Logo" />
+                        <img src="/logo.png" alt="" className="Logo" />
                     </div>
                     <p>Your mind should be stronger than your feelings, fly!</p>
                     <div className="socialIcon flex">

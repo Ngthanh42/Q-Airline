@@ -1,8 +1,5 @@
 import React, {useEffect} from "react"
 
-import video from '../../assets/video.mp4'
-import aeroplane from '../../assets/takeOff.png'
-
 import Aos from "aos"
 import "aos/dist/aos.css"
 
@@ -19,10 +16,10 @@ const Home = () => {
 
             <div data-aos='fade-down' data-aos-duration='2500' className="homeImages flex">
                 <div className="videoDiv">
-                    <video src={video} autoPlay muted loop className="video"></video>
+                    <video src="/video.mp4" autoPlay muted loop className="video"></video>
                 </div>
 
-                <img src={aeroplane} alt="" className="plane" />
+                <img src="/takeOff.png" alt="" className="plane" />
             </div>
         </div>
     )

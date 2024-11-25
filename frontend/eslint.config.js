@@ -41,6 +41,8 @@ export default [
           js: 'never',
           jsx: 'never',
           mp4: 'always',
+          jpg: 'always',
+          jpeg: 'always',
           png: 'always',
         },
       ],

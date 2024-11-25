@@ -1,88 +1,77 @@
 import React, {useEffect} from "react"
 
-import paris from "../../assets/paris.jpg"
-import dubai from "../../assets/dubai.jpg"
-import london from "../../assets/london.jpg"
-import tokyo from "../../assets/tokyo.jpg"
-import newYork from "../../assets/new-york.jpg"
-import hanoi from "../../assets/hanoi.jpg"
-import seoul from "../../assets/seoul.jpg"
-import berlin from "../../assets/berlin.jpg"
-
-import traveler_1 from "../../assets/user.jpg"
-
 import Aos from "aos"
 import "aos/dist/aos.css"
 
 const travelers = [
     {
         id: 1,
-        destinationImage: paris,
+        destinationImage: "/paris.jpg",
         destinationName: "Paris, France",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 2,
-        destinationImage: dubai,
+        destinationImage: "/dubai.jpg",
         destinationName: "Dubai, UAE",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 3,
-        destinationImage: london,
+        destinationImage: "/london.jpg",
         destinationName: "London, England",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 4,
-        destinationImage: tokyo,
+        destinationImage: "/tokyo.jpg",
         destinationName: "Tokyo, Japan",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 5,
-        destinationImage: newYork,
+        destinationImage: "/new-york.jpg",
         destinationName: "New York, USA",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 6,
-        destinationImage: hanoi,
+        destinationImage: "/hanoi.jpg",
         destinationName: "Hanoi, Vietnam",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 7,
-        destinationImage: seoul,
+        destinationImage: "/seoul.jpg",
         destinationName: "Seoul, Kroea",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },
 
     {
         id: 8,
-        destinationImage: berlin,
+        destinationImage: "/berlin.jpg",
         destinationName: "Berlin, Germany",
-        travelerImage: traveler_1,
+        travelerImage: "/user.jpg",
         travelerName: "Chu Viet Kien",
         socialLink: "@chuvietkien"
     },

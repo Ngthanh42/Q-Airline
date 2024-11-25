@@ -12,7 +12,8 @@ const Lounge = () => {
         <div className="lounge container section">
             <div className="sectionContainer grid">
                 <div data-aos='fade-down' data-aos-duration='2500' className="imgDiv">
-                    <img src="" alt="" />
+                    <img src="/lounge-1.jpg" alt="" />
+                    <img src="/lounge-2.jpg" alt="" />
                 </div>
 
                 <div className="textDiv">

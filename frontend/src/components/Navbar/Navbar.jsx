@@ -1,11 +1,10 @@
-import React, {useState} from "react"
+import React, {useState} from "react";
+import { Link } from "react-router-dom";
 
-import { SiConsul } from 'react-icons/si'
-import { BsPhoneVibrate } from 'react-icons/bs'
-import { AiOutlineGlobal } from 'react-icons/ai'
-import { CgMenuGridO } from 'react-icons/cg'
-
-import logo from '../../assets/logo.png'
+import { SiConsul } from 'react-icons/si';
+import { BsPhoneVibrate } from 'react-icons/bs';
+import { AiOutlineGlobal } from 'react-icons/ai';
+import { CgMenuGridO } from 'react-icons/cg';
 
 const Navbar = () => {
     // Remove the navbar in the small width screens
@@ -42,23 +41,35 @@ const Navbar = () => {
                 </div>
 
                 <div className="atb flex">
-                    <span>Sign In</span>
-                    <span>Sign Up</span>
+                    <span>
+                        <Link to="/signin">Sign In</Link>
+                    </span>
+                    <span><Link to="/signup">Sign Up</Link></span>
                 </div>
             </div>
 
             <div className={noBg}>
                 <div className="logoDiv">
-                    <img src={logo} alt="" className="Logo" />
+                    <img src="/logo.png" alt="" className="Logo" />
                 </div>
 
                 <div className={active}>
                     <ul className="menu flex">
-                        <li onClick={removeNavBar} className="listItem">Home</li>
-                        <li onClick={removeNavBar} className="listItem">About</li>
-                        <li onClick={removeNavBar} className="listItem">Offers</li>
-                        <li onClick={removeNavBar} className="listItem">Seats</li>
-                        <li onClick={removeNavBar} className="listItem">Destinations</li>
+                        <li onClick={removeNavBar} className="listItem">
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li onClick={removeNavBar} className="listItem">
+                            <Link to="/about-us">About</Link>
+                        </li>
+                        <li onClick={removeNavBar} className="listItem">
+                            <Link to="">Offers</Link>
+                        </li>
+                        <li onClick={removeNavBar} className="listItem">
+                            <Link to="">Seats</Link>
+                        </li>
+                        <li onClick={removeNavBar} className="listItem">
+                            <Link to="">Destinations</Link>
+                        </li>
                     </ul>
 
                     <button onClick={removeNavBar} className="btn flex btnOne">

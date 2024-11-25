@@ -140,7 +140,7 @@ h2 {
         .atb {
             gap: 1rem;
 
-            span {
+            span a {
                 color: var(--blackColor);
                 font-size: 13px;
                 cursor: pointer;
@@ -188,7 +188,7 @@ h2 {
                     gap: .5rem;
                     text-align: center;
 
-                    .listItem {
+                    .listItem a {
                         padding: .5rem 0;
                         cursor: pointer;
                         color: var(--blackColor);
@@ -245,6 +245,7 @@ h2 {
         font-weight: 700;
         font-size: 15px;
         line-height: 2.5rem;
+        // z-index: 1000;
     }
 
     .homeImages {
@@ -406,10 +407,41 @@ h2 {
 
             .imgDiv {
                 margin: auto;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+                margin-top: 13rem;
+                margin-bottom: 10rem;
 
+                // img {
+                //     width: 100%;
+                //     max-width: 450px;
+                // }
                 img {
-                    width: 100%;
-                    max-width: 450px;
+                    width: 200px;
+                    height: 250px;
+                    border-radius: 1rem;
+                    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                    object-fit: cover;
+                    position: absolute;
+                    transition: transform 0.3s ease-in-out;
+                }
+
+                // Sắp xếp ảnh so le
+                .imgOne {
+                    transform: translateX(-80px) translateY(-200px);
+                    z-index: 3;
+                }
+
+                .imgTwo {
+                    transform: translateX(80px) translateY(-90px);
+                    z-index: 2;
+                }
+
+                .imgThree {
+                    transform: translateX(5px) translateY(30px);
+                    z-index: 1;
                 }
             }
         }
@@ -479,12 +511,36 @@ h2 {
     .sectionContainer {
         gap: 1.5rem;
 
-        .imgDviv {
+        .imgDiv {
             margin: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 2rem;
 
+            // img {
+            //     width: 100%;
+            //     max-width: 430px;
+            // }
             img {
-                width: 100%;
-                max-width: 430px;
+                width: 200px;
+                height: 250px;
+                object-fit: cover;
+                border-radius: 15px;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            /* Sắp xếp ảnh so le */
+            img:nth-child(1) {
+                transform: translateX(20px) translateY(-40px);
+                z-index: 3;
+            }
+
+            img:nth-child(2) {
+                transform: translateX(-10px) translateY(45px);
+                z-index: 2;
             }
         }
 
@@ -719,6 +775,129 @@ h2 {
     }
 }
 
+/* Auth Page Common Styling (Sign In & Sign Up) */
+.auth-page {
+    .auth-container {
+        max-width: 600px;
+        margin: 5rem auto 5px;
+        background: var(--SecondaryColor);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        text-align: center;
+
+        h2 {
+            font-size: 22px;
+            color: var(--PrimaryColor);
+            margin-bottom: 1rem;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--greyText);
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .inputGroup {
+            text-align: left;
+
+            label {
+                font-size: 14px;
+                font-weight: 500;
+                color: var(--blackColor);
+                margin-bottom: 0.5rem;
+                display: block;
+            }
+
+            input {
+                width: 100%;
+                padding: 0.8rem;
+                border: 1px solid var(--borderColor);
+                border-radius: 5px;
+                background: var(--whiteColor);
+                color: var(--textColor);
+                font-size: 14px;
+            }
+
+            input:focus {
+                outline: none;
+                border: 1px solid var(--PrimaryColor);
+                box-shadow: 0 0 4px var(--PrimaryColor);
+            }
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+
+            .rememberMe {
+                font-size: 14px;
+                color: var(--blackColor);
+
+                input {
+                    margin-right: 0.5rem;
+                }
+            }
+
+            .forgotPassword {
+                font-size: 14px;
+                color: var(--PrimaryColor);
+                text-decoration: none;
+            }
+
+            .forgotPassword:hover {
+                text-decoration: underline;
+            }
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+            padding: 0.8rem 0;
+        }
+
+        a {
+            color: var(--PrimaryColor);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 1.5rem 0;
+            color: var(--greyText);
+            font-size: 14px;
+            font-weight: 500;
+
+            span {
+                font-size: 1rem;
+            }
+        }
+        
+        .separator::before,
+        .separator::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--borderColor);
+            margin: 0 1rem;
+        }
+    }
+}
+
 // Media sreen styling
 @media screen and (min-width: 480px) {
 
@@ -911,6 +1090,49 @@ h2 {
         }
     }
 
+    // Support section styling
+    .support {
+        .sectionContainer {
+            .infoDiv {
+                .imgDiv {
+                    margin: auto;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    gap: 1rem;
+                    margin-top: 13rem;
+                    margin-bottom: 10rem;
+
+                    img {
+                        width: 200px;
+                        height: 250px;
+                        border-radius: 1rem;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                        object-fit: cover;
+                        position: absolute;
+                        transition: transform 0.3s ease-in-out;
+                    }
+
+                    // Sắp xếp ảnh so le
+                    .imgOne {
+                        transform: translateX(-90px) translateY(-200px);
+                        z-index: 3;
+                    }
+
+                    .imgTwo {
+                        transform: translateX(100px) translateY(-90px);
+                        z-index: 2;
+                    }
+
+                    .imgThree {
+                        transform: translateX(5px) translateY(30px);
+                        z-index: 1;
+                    }
+                }
+            }
+        }
+    }
+
     // Footer section styling
     .footer {
         .sectionContainer {
@@ -957,12 +1179,12 @@ h2 {
                 flex-direction: row;
                 gap: .5rem;
 
-                .listItem {
+                .listItem a {
                     padding: 0 .5rem;
                     font-size: 14px;
                     cursor: pointer;
                     color: var(--textColor);
-                    font-weight: 700;
+                    font-weight: 500;
 
                     &:hover {
                         color: var(--PrimaryColor);
@@ -1012,6 +1234,23 @@ h2 {
                 .textDiv {
                     margin-top: 0rem;
                     grid-template-columns: repeat(1, 1fr);
+                }
+
+                .imgDiv {
+                    .imgOne {
+                        transform: translateX(-80px) translateY(-200px);
+                        z-index: 3;
+                    }
+    
+                    .imgTwo {
+                        transform: translateX(80px) translateY(-90px);
+                        z-index: 2;
+                    }
+    
+                    .imgThree {
+                        transform: translateX(5px) translateY(30px);
+                        z-index: 1;
+                    }
                 }
             }
         }
@@ -1099,7 +1338,6 @@ h2 {
 }
 
 @media screen and (min-width: 1024px) {
-
     // Default styling
     p {
         font-size: 15px;
@@ -1125,13 +1363,15 @@ h2 {
 
     // NavBar section styling
     .navBar {
-        .navBarOne, .navBarTwo {
+
+        .navBarOne,
+        .navBarTwo {
             padding-bottom: 1.5rem 5rem;
         }
 
-        .navbar_With_Bg {
-            padding: 0 5rem;
-        }
+        // .navbar_With_Bg {
+        //     padding: 0 5rem;
+        // }
     }
 
     // Home section styling 
@@ -1172,9 +1412,84 @@ h2 {
             }
         }
     }
+
+    // Support section styling
+    .support {
+        .sectionContainer {
+            .infoDiv {
+                .imgDiv {
+                    margin: auto;
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    gap: 1rem;
+
+                    img {
+                        width: 200px;
+                        height: 250px;
+                        border-radius: 1rem;
+                        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+                        object-fit: cover;
+                        position: absolute;
+                        transition: transform 0.3s ease-in-out;
+                    }
+
+                    // Sắp xếp ảnh so le
+                    .imgOne {
+                        transform: translateX(-50px) translateY(-200px);
+                        z-index: 3;
+                    }
+
+                    .imgTwo {
+                        transform: translateX(120px) translateY(-90px);
+                        z-index: 2;
+                    }
+
+                    .imgThree {
+                        transform: translateX(10px) translateY(30px);
+                        z-index: 1;
+                    }
+                }
+            }
+        }
+    }
+
+    // Lounge section styling
+    .lounge {
+        .sectionContainer {
+            .imgDiv {
+                margin: auto;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                img {
+                    width: 200px;
+                    height: 250px;
+                    object-fit: cover;
+                    border-radius: 15px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease-in-out;
+                }
+
+                /* Sắp xếp ảnh so le */
+                img:nth-child(1) {
+                    transform: translateX(60px) translateY(-40px);
+                    z-index: 3;
+                }
+
+                img:nth-child(2) {
+                    transform: translateX(30px) translateY(45px);
+                    z-index: 2;
+                }
+            }
+        }
+    }
 }
 
 @media screen and (min-width: 1106px) {
+
     // Home section styling 
     .home {
         .homeImages {
@@ -1194,12 +1509,14 @@ h2 {
 }
 
 @media screen and (min-width: 1332px) {
+
     // NavBar section styling
     .navBar {
         .navBarTwo {
             .menu {
                 gap: 1rem;
-                .listItem {
+
+                .listItem a {
                     padding: 0 1.5rem;
                     font-size: 14px;
                 }
@@ -1233,6 +1550,7 @@ h2 {
 }
 
 @media screen and (min-width: 1440px) {
+
     // Home section styling 
     .home {
         .homeImages {
