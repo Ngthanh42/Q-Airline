@@ -18,7 +18,7 @@ const App = () => {
     <Router>
       <Navbar />
       <Routes>
-        {/* Route cho trang chính */}
+        {/* Route home page */}
         <Route
           path="/"
           element={
@@ -34,7 +34,7 @@ const App = () => {
           }
         />
 
-        <Route path="/signin" element={<div><SignIn /></div>} />
+        <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
       </Routes>
       <Footer />
