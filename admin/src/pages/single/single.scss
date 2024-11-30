@@ -57,6 +57,24 @@
 
               .itemValue {
                 font-weight: 300;
+
+                &.Active {
+                  font-weight: 700;
+                  color: green;
+                  background-color: rgba(0, 128, 0, 0.151);
+                }
+
+                &.Maintenance {
+                  font-weight: 700;
+                  color: goldenrod;
+                  background-color: rgba(189, 189, 3, 0.103);
+                }
+
+                &.Retired {
+                  font-weight: 700;
+                  color: red;
+                  background-color: rgba(189, 189, 3, 0.103);
+                }
               }
             }
           }

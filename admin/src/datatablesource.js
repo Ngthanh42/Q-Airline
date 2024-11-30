@@ -1,9 +1,9 @@
 export const userColumns = [
-  { field: "id", headerName: "ID", width: 70 },
+  { field: "id", headerName: "ID", width: 30 },
   {
     field: "user",
     headerName: "User",
-    width: 230,
+    width: 200,
     renderCell: (params) => {
       return (
         <div className="cellWithImg">
@@ -20,13 +20,13 @@ export const userColumns = [
   {
     field: "email",
     headerName: "Email",
-    width: 230,
+    width: 200,
   },
 
   {
     field: "address",
     headerName: "Address",
-    width: 100,
+    width: 230,
   },
   {
     field: "country",
@@ -36,7 +36,54 @@ export const userColumns = [
   {
     field: "phone",
     headerName: "Phone",
-    width: 100,
+    width: 130,
+  },
+];
+
+export const planeColumns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 90,
+  },
+  {
+    field: "model",
+    headerName: "Model",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <div className="cellWithImg">
+          <img
+            className="cellImg"
+            src={params.row.avatar || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+            alt="avatar"
+          />
+          {params.row.model}
+        </div>
+      );
+    },
+  },
+  {
+    field: "manufacturer",
+    headerName: "Manufacturer",
+    width: 150,
+  },
+  {
+    field: "year_of_manufacture",
+    headerName: "Year of Manufacture",
+    width: 150,
+    type: "string",
+  },
+  {
+    field: "registration_number",
+    headerName: "Registration Number",
+    width: 150,
+  },
+  {
+    field: "capacity",
+    headerName: "Capacity",
+    width: 150,
+    renderCell: (params) => `${params.row.capacity} seats`,
   },
 ];
 

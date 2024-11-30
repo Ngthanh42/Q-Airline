@@ -163,3 +163,30 @@ export const updatePassword = async (req, res) => {
         res.status(500).json({ message: "Lỗi máy chủ!" });
     }
 };
+
+export const deleteUser = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        // Kiểm tra người dùng tồn tại
+        const [user] = await pool.query("SELECT * FROM users WHERE user_id = ?", [id]);
+        if (user.length === 0) {
+            return res.status(404).json({ message: "Người dùng không tồn tại." });
+        }
+
+        // Xóa vai trò liên kết với người dùng
+        await pool.query("DELETE FROM user_roles WHERE user_id = ?", [id]);
+
+        // Xóa người dùng
+        const [result] = await pool.query("DELETE FROM users WHERE user_id = ?", [id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ message: "Không thể xóa người dùng." });
+        }
+
+        res.status(200).json({ message: "Xóa người dùng thành công." });
+    } catch (error) {
+        console.error("Lỗi khi xóa người dùng:", error);
+        res.status(500).json({ message: "Lỗi máy chủ." });
+    }
+};

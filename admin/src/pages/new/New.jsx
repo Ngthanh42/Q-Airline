@@ -5,12 +5,16 @@ import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUpload
 
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../config/axiosInstance";
+import { toast } from "react-toastify";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import useFetch from "../../hooks/useFetch";
 
 const New = ({ inputs, title }) => {
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
+  const [showPasswords, setShowPasswords] = useState({});
+  const [errors, setErrors] = useState({});
 
   const location = useLocation();
   const path = location.pathname.split("/")[3];
@@ -26,30 +30,102 @@ const New = ({ inputs, title }) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
+  const togglePasswordVisibility = (id) => {
+    setShowPasswords((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const handleClick = async (e) => {
     e.preventDefault();
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "upload");
+
+    if (!validate()) {
+      toast.error('Please fix the errors before submitting.');
+      return;
+    }
+
     try {
-      const uploadRes = await axios.post(
-        "https://api.cloudinary.com/v1_1/dfsarmr16/image/upload",
-        data
-      );
-      
-      const { url } = uploadRes.data;
+      let imageUrl = '';
+
+      if (file) {
+        // Chuyển đổi file sang Base64
+        const base64 = await toBase64(file);
+
+        // Gửi Base64 tới API upload
+        const uploadRes = await axiosInstance.post("/api/upload-avatar", { image: base64, name_folder: "admin_uploads" });
+
+        imageUrl = uploadRes.data.url;
+      }
 
       const newUser = {
-        ...info,
-        img: url,
+        full_name: info.username,
+        email: info.email,
+        password: info.password,
+        phone: info.phone,
+        address: info.address,
+        country: info.country,
+        dob: info.dob || null,
+        role: info.role || 'Customer',
+        avatar: imageUrl || null,
       };
 
-      await axios.post("/auth/register", newUser);
+      await axiosInstance.post('/auth/register', newUser);
+      toast.success('Tạo người dùng thành công!');
     } catch (err) {
-      console.log(err);
+      console.error('Lỗi khi tạo người dùng:', err);
+      toast.error('Đã xảy ra lỗi khi tạo người dùng!');
     }
   };
-      
+
+  // Chuyển file sang Base64
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+    });
+
+  const validate = () => {
+    const newErrors = {};
+
+    // Kiểm tra Username
+    if (!info.username || info.username.trim() === "") {
+      newErrors.username = "Username is required.";
+    }
+
+    // Kiểm tra Email
+    if (!info.email || info.email.trim() === "") {
+      newErrors.email = "Email is required.";
+    } else if (!/^\S+@\S+\.\S+$/.test(info.email)) {
+      newErrors.email = "Invalid email format.";
+    }
+
+    // Kiểm tra Số điện thoại
+    if (!info.phone || info.phone.trim() === "") {
+      newErrors.phone = "Phone number is required.";
+    } else if (!/^\d{10,15}$/.test(info.phone)) {
+      newErrors.phone = "Phone number must be between 10-15 digits.";
+    }
+
+    // Kiểm tra Mật khẩu
+    if (info.password && info.password.trim() !== "") {
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(info.password)) {
+        newErrors.password =
+          "Password must be at least 8 characters, include an uppercase letter, a lowercase letter, and a special character.";
+      }
+    }
+
+    // Kiểm tra Address
+    if (!info.address || info.address.trim() === "") {
+      newErrors.address = "Address is required.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   return (
     <div className="new">
       <Sidebar />
@@ -78,6 +154,7 @@ const New = ({ inputs, title }) => {
                 <input
                   type="file"
                   id="file"
+                  accept="image/*"
                   onChange={(e) => setFile(e.target.files[0])}
                   style={{ display: "none" }}
                 />
@@ -86,12 +163,43 @@ const New = ({ inputs, title }) => {
               {inputs.map((input) => (
                 <div className="formInput" key={input.id}>
                   <label>{input.label}</label>
-                  <input
-                    onChange={handleChange}
-                    type={input.type}
-                    placeholder={input.placeholder}
-                    id={input.id}
-                  />
+                  {input.type === "password" ? (
+                    <div className="password-container">
+                      <input
+                        type={showPasswords[input.id] ? "text" : "password"}
+                        id={input.id}
+                        value={info[input.id] || ""}
+                        onChange={handleChange}
+                        placeholder={input.placeholder}
+                      />
+                      <button
+                        type="button"
+                        className="toggle-password"
+                        onClick={() => togglePasswordVisibility(input.id)}
+                      >
+                        {showPasswords[input.id] ? <FaEyeSlash /> : <FaEye />}
+                      </button>
+                    </div>
+                  ) : input.type === "select" ? (
+                    <select
+                      id={input.id}
+                      value={info[input.id] || ""}
+                      onChange={handleChange}
+                    >
+                      {input.options.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <input
+                      onChange={handleChange}
+                      type={input.type}
+                      placeholder={input.placeholder}
+                      id={input.id}
+                    />
+                  )}
                 </div>
               ))}
               <button onClick={handleClick}>Send</button>

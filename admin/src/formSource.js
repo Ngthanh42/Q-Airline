@@ -52,6 +52,60 @@ export const userInputs = [
   },
 ];
 
+export const planeInputs = [
+  {
+    id: "model",
+    label: "Model",
+    type: "text",
+    placeholder: "Boeing 737",
+  },
+  {
+    id: "manufacturer",
+    label: "Manufacturer",
+    type: "text",
+    placeholder: "Boeing",
+  },
+  {
+    id: "year_of_manufacture",
+    label: "Year of Manufacture",
+    type: "number",
+    placeholder: "2020",
+  },
+  {
+    id: "registration_number",
+    label: "Registration Number",
+    type: "text",
+    placeholder: "VN-A321",
+  },
+  {
+    id: "fuel_capacity",
+    label: "Fuel Capacity (L)",
+    type: "number",
+    placeholder: "50000",
+  },
+  {
+    id: "last_inspection_date",
+    label: "Last Inspection Date",
+    type: "date",
+  },
+  {
+    id: "capacity",
+    label: "Capacity",
+    type: "number",
+    placeholder: "180",
+  },
+  {
+    id: "status",
+    label: "Status",
+    type: "select",
+    options: [
+      { value: "Active", label: "Active" },
+      { value: "Maintenance", label: "Maintenance" },
+      { value: "Retired", label: "Retired" },
+    ],
+  },
+];
+
 export const productInputs = [
   {
     id: 1,

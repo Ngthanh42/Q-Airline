@@ -4,18 +4,18 @@ import List from "./pages/list/List";
 import Single from "./pages/single/Single";
 import New from "./pages/new/New";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { NotificationInputs, productInputs, userInputs } from "./formSource";
+import { NotificationInputs, planeInputs, productInputs, userInputs } from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
-import { hotelColumns, notificationColumns, roomColumns, ticketColumns, userColumns } from "./datatablesource";
-import NewHotel from "./pages/newHotel/NewHotel";
+import { planeColumns, notificationColumns, roomColumns, ticketColumns, userColumns } from "./datatablesource";
 import NewRoom from "./pages/newRoom/NewRoom";
 import Account from "./pages/account/Account";
 import Log from "./pages/log/Log";
 import NewNotify from "./pages/newNotify/NewNotify";
 import Edit from "./pages/edit/Edit";
+import NewPlane from "./pages/newPlane/NewPlane";
 
 
 function App() {
@@ -78,32 +78,45 @@ function App() {
                 }
               />
             </Route>
-            <Route path="hotels">
+
+            <Route path="airplanes">
               <Route
                 index
                 element={
                   <ProtectedRoute>
-                    <List columns={hotelColumns} />
+                    <List columns={planeColumns} />
                   </ProtectedRoute>
                 }
               />
+
               <Route
-                path=":productId"
+                path=":airplanesId"
                 element={
                   <ProtectedRoute>
                     <Single />
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewHotel />
+                    <NewPlane />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="edit/:airplanesId"
+                element={
+                  <ProtectedRoute>
+                    <Edit inputs={planeInputs} title="Edit Airplane" />
                   </ProtectedRoute>
                 }
               />
             </Route>
+
             <Route path="rooms">
               <Route
                 index

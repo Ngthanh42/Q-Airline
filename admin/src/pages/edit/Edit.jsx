@@ -18,8 +18,9 @@ const Edit = ({ inputs, title }) => {
   const [errors, setErrors] = useState({});
 
   const location = useLocation();
-  const path = location.pathname.split("/")[3];
-  const { data, loading, error } = useFetch(`/api/users/${path}`);
+  const id = location.pathname.split("/")[3];
+  const path = location.pathname.split("/")[1];
+  const { data, loading, error } = useFetch(`/api/${path}/${id}`);
 
   useEffect(() => {
     if (data) {
@@ -55,14 +56,14 @@ const Edit = ({ inputs, title }) => {
     data.append("file", file);
     data.append("upload_preset", "upload");
     try {
-      let imageUrl = "";
+      let imageUrl = info.avatar;
 
       if (file) {
         // Chuyển đổi file sang Base64
         const base64 = await toBase64(file);
 
         // Gửi Base64 tới API upload
-        const uploadRes = await axiosInstance.post("/api/upload", { image: base64 });
+        const uploadRes = await axiosInstance.post("/api/upload-avatar", { image: base64, name_folder: "admin_uploads" });
 
         imageUrl = uploadRes.data.url;
       }
@@ -73,10 +74,10 @@ const Edit = ({ inputs, title }) => {
         role: info.role,
       };
 
-      await axiosInstance.put(`/api/users/${path}`, newUser);
+      await axiosInstance.put(`/api/users/${id}`, newUser);
 
       // Gọi lại API `GET` để lấy dữ liệu mới nhất
-      const res = await axiosInstance.get(`/api/users/${path}`);
+      const res = await axiosInstance.get(`/api/users/${id}`);
       setInfo({
         ...res.data,
         dob: res.data.dob ? dayjs(res.data.dob).format("YYYY-MM-DD") : "",
@@ -169,6 +170,7 @@ const Edit = ({ inputs, title }) => {
                 <input
                   type="file"
                   id="file"
+                  accept="image/*"
                   onChange={(e) => setFile(e.target.files[0])}
                   style={{ display: "none" }}
                 />
@@ -212,10 +214,14 @@ const Edit = ({ inputs, title }) => {
                       type={input.type}
                       placeholder={input.placeholder}
                       id={input.id}
-                      value={info[input.id] || ""}
+                      value={
+                        input.type === "date" && info[input.id]
+                          ? dayjs(info[input.id]).format("YYYY-MM-DD")
+                          : info[input.id] || ""
+                      }
                     />
-                  )
-                  }
+                  )}
+                  
                   {/* Hiển thị lỗi */}
                   {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>

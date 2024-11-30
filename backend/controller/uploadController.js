@@ -1,15 +1,15 @@
 import cloudinary from "../config/cloudinary.js";
 
-export const uploadImage = async (req, res) => {
+export const uploadAvatarImage = async (req, res) => {
     try {
-        const { image } = req.body; // Hình ảnh gửi từ frontend (Base64 hoặc URL file)
+        const { image, name_folder } = req.body;
         if (!image) {
             return res.status(400).json({ message: "Không có hình ảnh được tải lên" });
         }
 
         // Tải lên hình ảnh tới Cloudinary
         const uploadResponse = await cloudinary.uploader.upload(image, {
-            folder: "admin_uploads", // Lưu vào folder "admin_uploads" trên Cloudinary
+            folder: name_folder,
             transformation: [{ width: 500, height: 500, crop: "limit" }],
         });
 
