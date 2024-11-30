@@ -49,7 +49,7 @@ const Navbar = () => {
           </div>
           <div className="item">
             <Link to="/account">
-              <img src={user.img} alt="avatar" className="avatar" />
+              <img src={user.avatar} alt="avatar" className="avatar" />
             </Link>
           </div>
         </div>

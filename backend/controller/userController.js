@@ -1,15 +1,19 @@
 import pool from "../config/database.js";
+import bcrypt from 'bcryptjs';
+import { findUserById } from '../models/userModel.js';
 
 export const getUsers = async (req, res) => {
     try {
         // Query lấy danh sách người dùng
         const [rows] = await pool.query(
             `SELECT u.user_id AS id, u.full_name AS username, u.email, 
-              u.phone_number AS phone, ur.role_id, r.role_name AS role, 
+              u.avatar, u.birth_date, u.phone_number AS phone, 
+              u.country, u.address, u.is_email_verified, 
+              ur.role_id, r.role_name AS role, 
               u.created_at, u.updated_at
-       FROM users u
-       LEFT JOIN user_roles ur ON u.user_id = ur.user_id
-       LEFT JOIN roles r ON ur.role_id = r.role_id`
+             FROM users u
+             LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+             LEFT JOIN roles r ON ur.role_id = r.role_id`
         );
 
         // Kiểm tra nếu không có người dùng
@@ -31,12 +35,14 @@ export const getUserById = async (req, res) => {
     try {
         const [rows] = await pool.query(
             `SELECT u.user_id AS id, u.full_name AS username, u.email, 
-                u.phone_number AS phone, ur.role_id, r.role_name AS role, 
+                u.avatar, u.birth_date AS dob, u.phone_number AS phone, 
+                u.country, u.address, u.is_email_verified, 
+                ur.role_id, r.role_name AS role, 
                 u.created_at, u.updated_at
-         FROM users u
-         LEFT JOIN user_roles ur ON u.user_id = ur.user_id
-         LEFT JOIN roles r ON ur.role_id = r.role_id
-         WHERE u.user_id = ?`,
+             FROM users u
+             LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+             LEFT JOIN roles r ON ur.role_id = r.role_id
+             WHERE u.user_id = ?`,
             [id]
         );
 
@@ -56,18 +62,104 @@ export const updateUser = async (req, res) => {
     const updatedData = req.body;
 
     try {
+        // Cập nhật thông tin người dùng
         const [result] = await pool.query(
-            `UPDATE users SET ? WHERE user_id = ?`,
-            [updatedData, id]
+            `UPDATE users SET full_name = ?, email = ?, avatar = ?, phone_number = ?, birth_date = ?, 
+            country = ?, address = ? WHERE user_id = ?`,
+            [
+                updatedData.username,
+                updatedData.email,
+                updatedData.avatar,
+                updatedData.phone,
+                updatedData.dob,
+                updatedData.country,
+                updatedData.address,
+                id,
+            ]
         );
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Người dùng không tồn tại" });
         }
 
-        res.status(200).json({ message: "Cập nhật thông tin thành công" });
+        // Nếu có role trong request body, xử lý cập nhật vai trò
+        if (updatedData.role) {
+            const [roleResult] = await pool.query(
+                `SELECT role_id FROM roles WHERE role_name = ?`,
+                [updatedData.role]
+            );
+
+            if (roleResult.length === 0) {
+                return res.status(400).json({ message: "Vai trò không hợp lệ" });
+            }
+
+            const roleId = roleResult[0].role_id;
+
+            const [userRoleResult] = await pool.query(
+                `SELECT * FROM user_roles WHERE user_id = ?`,
+                [id]
+            );
+
+            if (userRoleResult.length > 0) {
+                await pool.query(
+                    `UPDATE user_roles SET role_id = ? WHERE user_id = ?`,
+                    [roleId, id]
+                );
+            } else {
+                await pool.query(
+                    `INSERT INTO user_roles (user_id, role_id) VALUES (?, ?)`,
+                    [id, roleId]
+                );
+            }
+        }
+
+        // Nếu có mật khẩu mới, thực hiện băm và cập nhật mật khẩu
+        if (updatedData.password) {
+            const bcrypt = require("bcrypt");
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(updatedData.password, salt);
+
+            await pool.query(
+                `UPDATE users SET password_hash = ? WHERE user_id = ?`,
+                [hashedPassword, id]
+            );
+        }
+
+        // Gửi phản hồi thành công sau khi tất cả các thao tác hoàn tất
+        res.status(200).json({ message: "Cập nhật thông tin người dùng thành công" });
     } catch (err) {
         console.error("Lỗi khi cập nhật thông tin người dùng:", err);
         res.status(500).json({ message: "Lỗi máy chủ" });
+    }
+};
+
+export const updatePassword = async (req, res) => {
+    console.log("req.params:", req.params);
+    const { id } = req.params;
+    const { oldPassword, newPassword } = req.body;
+
+    try {
+        const user = await findUserById(id);
+        const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ message: "Mật khẩu hiện tại không chính xác!" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        const [result] = await pool.query(
+            "UPDATE users SET password_hash = ? WHERE user_id = ?",
+            [hashedPassword, id]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(500).json({ message: "Cập nhật mật khẩu thất bại." });
+        }
+
+        res.status(200).json({ message: "Mật khẩu đã được thay đổi!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi máy chủ!" });
     }
 };

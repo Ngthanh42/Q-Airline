@@ -15,6 +15,7 @@ import NewRoom from "./pages/newRoom/NewRoom";
 import Account from "./pages/account/Account";
 import Log from "./pages/log/Log";
 import NewNotify from "./pages/newNotify/NewNotify";
+import Edit from "./pages/edit/Edit";
 
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
                 path="edit/:userId"
                 element={
                   <ProtectedRoute>
-                    <New inputs={userInputs} title="Edit User" />
+                    <Edit inputs={userInputs} title="Edit User" />
                   </ProtectedRoute>
                 }
               />

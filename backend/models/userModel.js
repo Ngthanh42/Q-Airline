@@ -6,6 +6,26 @@ export const findUserByEmail = async (email) => {
     return result[0];
 };
 
+// Tìm người dùng theo id
+export const findUserById = async (id) => {
+    const [rows] = await pool.query(
+        `SELECT u.user_id AS id, u.full_name AS username, u.email, 
+            u.avatar, u.birth_date AS dob, u.phone_number AS phone, 
+            u.country, u.address, u.is_email_verified, 
+            ur.role_id, r.role_name AS role, 
+            u.created_at, u.updated_at, u.password_hash AS password
+         FROM users u
+         LEFT JOIN user_roles ur ON u.user_id = ur.user_id
+         LEFT JOIN roles r ON ur.role_id = r.role_id
+         WHERE u.user_id = ?`,
+        [id]
+    );
+    if (rows.length === 0) {
+        throw new Error("Người dùng không tồn tại");
+    }
+    return rows[0];
+};
+
 // Tạo người dùng mới
 export const createUser = async (fullName, email, hashedPassword) => {
     const [result] = await pool.query(

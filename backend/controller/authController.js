@@ -59,10 +59,18 @@ export const login = async (req, res) => {
       message: 'Đăng nhập thành công',
       token,
       user: {
-        user_id: user.user_id,
-        full_name: user.full_name,
+        id: user.user_id,
+        username: user.full_name,
         email: user.email,
+        avatar: user.avatar || null,
+        dob: user.birth_date || null,
+        phone: user.phone_number || null,
+        country: user.country || null,
+        address: user.address || null,
         role: role.role_name,
+        isEmailVerified: user.is_email_verified,
+        createdAt: user.created_at,
+        updatedAt: user.updated_at,
       },
     });
   } catch (error) {

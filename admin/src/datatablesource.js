@@ -9,7 +9,7 @@ export const userColumns = [
         <div className="cellWithImg">
           <img
             className="cellImg"
-            src={params.row.img || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+            src={params.row.avatar || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
             alt="avatar"
           />
           {params.row.username}
@@ -24,13 +24,13 @@ export const userColumns = [
   },
 
   {
-    field: "country",
-    headerName: "Country",
+    field: "address",
+    headerName: "Address",
     width: 100,
   },
   {
-    field: "city",
-    headerName: "City",
+    field: "country",
+    headerName: "Country",
     width: 100,
   },
   {

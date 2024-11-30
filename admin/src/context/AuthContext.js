@@ -47,6 +47,7 @@ export const AuthContextProvider = ({ children }) => {
   }, [state.user]);
 
   const logout = () => {
+    localStorage.removeItem("user");
     dispatch({ type: "LOGOUT" });
   };
 

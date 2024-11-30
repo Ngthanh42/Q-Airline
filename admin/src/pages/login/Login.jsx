@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import "./login.scss";
+import axiosInstance from "../../config/axiosInstance";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({
@@ -22,7 +23,7 @@ const Login = () => {
     dispatch({ type: "LOGIN_START" });
 
     try {
-      const res = await axios.post("/auth/login", credentials);
+      const res = await axiosInstance.post("/auth/login", credentials);
 
       const { token, user } = res.data;
 
@@ -39,6 +40,7 @@ const Login = () => {
         navigate("/login");
       }
     } catch (err) {
+      console.log(err);
       dispatch({
         type: "LOGIN_FAILURE",
         payload: err.response?.data || { message: "Đăng nhập thất bại" },

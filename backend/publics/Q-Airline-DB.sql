@@ -7,8 +7,11 @@ CREATE TABLE users (
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    password_salt VARCHAR(255),
+    avatar VARCHAR(255) DEFAULT NULL,
     phone_number VARCHAR(15),
+    birth_date DATE DEFAULT NULL,
+    country VARCHAR(100) DEFAULT NULL,
+    address VARCHAR(255) DEFAULT NULL,
     is_email_verified BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

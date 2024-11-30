@@ -3,19 +3,19 @@ export const userInputs = [
     id: "username",
     label: "Username",
     type: "text",
-    placeholder: "john_doe",
+    placeholder: "Nguyen Van A",
   },
   {
     id: "email",
     label: "Email",
     type: "email",
-    placeholder: "john_doe@gmail.com",
+    placeholder: "nguyenvana@gmail.com",
   },
   {
     id: "phone",
-    label: "Phone",
+    label: "Phone number",
     type: "text",
-    placeholder: "+1 234 567 89",
+    placeholder: "+84 012 3456 789",
   },
   {
     id: "password",
@@ -23,16 +23,32 @@ export const userInputs = [
     type: "password",
   },
   {
+    id: "dob",
+    label: "Date of Birth",
+    type: "date",
+    placeholder: "Vietnam",
+  },
+  {
     id: "country",
     label: "Country",
     type: "text",
-    placeholder: "USA",
+    placeholder: "Vietnam",
   },
   {
-    id: "city",
-    label: "City",
+    id: "address",
+    label: "Address",
     type: "text",
-    placeholder: "USA",
+    placeholder: "Xuan Thuy, Cau Giay, Hanoi",
+  },
+  {
+    id: "role",
+    label: "Role",
+    type: "select",
+    options: [
+      { value: "Admin", label: "Admin" },
+      { value: "Staff", label: "Staff" },
+      { value: "Customer", label: "Customer" },
+    ],
   },
 ];
 

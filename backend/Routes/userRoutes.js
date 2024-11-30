@@ -1,5 +1,5 @@
 import express from "express";
-import { getUsers, getUserById, updateUser } from "../controller/userController.js";
+import { getUsers, getUserById, updateUser, updatePassword } from "../controller/userController.js";
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ const router = express.Router();
 router.get("/users", getUsers);
 router.get("/users/:id", getUserById);
 router.put("/users/:id", updateUser);
+router.put("/users/:id/changed-password", updatePassword);
 
 export default router;
