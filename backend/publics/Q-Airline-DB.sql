@@ -71,7 +71,8 @@ CREATE TABLE airports (
     city VARCHAR(100),
     country VARCHAR(100),
     iata_code VARCHAR(10) UNIQUE NOT NULL,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 -- Quản lý máy bay
@@ -94,9 +95,17 @@ CREATE TABLE airplanes (
 CREATE TABLE airplane_seats (
     seat_id INT AUTO_INCREMENT PRIMARY KEY,
     airplane_id INT NOT NULL,
-    seat_number VARCHAR(10) NOT NULL,
+    seat_number VARCHAR(10) NOT NULL,  -- Ví dụ: "1A", "10B"
     seat_class ENUM('Economy', 'Business', 'First') DEFAULT 'Economy',
-    FOREIGN KEY (airplane_id) REFERENCES airplanes(airplane_id)
+    rows_number INT NOT NULL,           -- Số hàng (1, 2, 3, ...)
+    is_occupied BOOLEAN DEFAULT false, -- Trạng thái ghế (true: đã đặt, false: còn trống)
+    passenger_id INT DEFAULT NULL,     -- Liên kết với hành khách đã đặt (user_id)
+    price DECIMAL(10, 2) DEFAULT NULL, -- Giá vé cho ghế (tùy chọn)
+    notes VARCHAR(255) DEFAULT NULL,   -- Ghi chú đặc biệt (ví dụ: trẻ em, người khuyết tật)
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (airplane_id) REFERENCES airplanes(airplane_id),
+    FOREIGN KEY (passenger_id) REFERENCES users(user_id)
 );
 
 -- Quản lý chuyến bay

@@ -106,6 +106,135 @@ export const planeInputs = [
   },
 ];
 
+export const seatInputs = [
+  {
+    id: "seat_number",
+    label: "Seat Number",
+    type: "text",
+    placeholder: "1A",
+  },
+  {
+    id: "seat_class",
+    label: "Seat Class",
+    type: "select",
+    options: [
+      { value: "Economy", label: "Economy" },
+      { value: "Business", label: "Business" },
+      { value: "First", label: "First" },
+    ],
+  },
+  {
+    id: "rows_number",
+    label: "Row Number",
+    type: "number",
+    placeholder: "1",
+  },
+  {
+    id: "is_occupied",
+    label: "Is Occupied",
+    type: "select",
+    options: [
+      { value: 0, label: "Available" },
+      { value: 1, label: "Occupied" },
+    ],
+  },
+  {
+    id: "passenger_id",
+    label: "Passenger ID",
+    type: "select",
+    options: [
+      { value: 0, label: "Nguyen Van A" },
+    ],
+  },
+  {
+    id: "price",
+    label: "Price",
+    type: "number",
+    placeholder: "Enter price (e.g., 100.00)",
+  },
+  {
+    id: "notes",
+    label: "Notes",
+    type: "text",
+    placeholder: "Enter any notes (optional)",
+  },
+];
+
+export const airportInputs = [
+  {
+    id: "name",
+    label: "Airport Name",
+    type: "text",
+    placeholder: "Enter airport name",
+  },
+  {
+    id: "city",
+    label: "City",
+    type: "text",
+    placeholder: "Enter city name",
+  },
+  {
+    id: "country",
+    label: "Country",
+    type: "text",
+    placeholder: "Enter country name",
+  },
+  {
+    id: "iata_code",
+    label: "IATA Code",
+    type: "text",
+    placeholder: "Enter IATA code (e.g., HAN, SGN)",
+  },
+];
+
+export const flightInputs = [
+  {
+    id: "airplane_id",
+    label: "Airplane",
+    type: "select",
+    options: [], // Danh sách máy bay sẽ được fetch từ API và gán vào đây
+  },
+  {
+    id: "departure_airport_id",
+    label: "Departure Airport",
+    type: "select",
+    options: [], // Danh sách sân bay khởi hành sẽ được fetch từ API
+  },
+  {
+    id: "arrival_airport_id",
+    label: "Arrival Airport",
+    type: "select",
+    options: [], // Danh sách sân bay đến sẽ được fetch từ API
+  },
+  {
+    id: "departure_time",
+    label: "Departure Time",
+    type: "datetime-local", // Hỗ trợ chọn cả ngày và giờ
+  },
+  {
+    id: "arrival_time",
+    label: "Arrival Time",
+    type: "datetime-local",
+  },
+  {
+    id: "ticket_price",
+    label: "Ticket Price",
+    type: "number",
+    placeholder: "Enter ticket price",
+  },
+  {
+    id: "status",
+    label: "Status",
+    type: "select",
+    options: [
+      { value: "Scheduled", label: "Scheduled" },
+      { value: "Delayed", label: "Delayed" },
+      { value: "Canceled", label: "Canceled" },
+      { value: "Completed", label: "Completed" },
+    ],
+  },
+];
+
 export const productInputs = [
   {
     id: 1,

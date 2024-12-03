@@ -1,5 +1,5 @@
 export const userColumns = [
-  { field: "id", headerName: "ID", width: 30 },
+  { field: "id", headerName: "ID", width: 10 },
   {
     field: "user",
     headerName: "User",
@@ -36,7 +36,12 @@ export const userColumns = [
   {
     field: "phone",
     headerName: "Phone",
-    width: 130,
+    width: 110,
+  },
+  {
+    field: "role",
+    headerName: "Role",
+    width: 70,
   },
 ];
 
@@ -44,7 +49,7 @@ export const planeColumns = [
   {
     field: "id",
     headerName: "ID",
-    width: 90,
+    width: 10,
   },
   {
     field: "model",
@@ -84,6 +89,108 @@ export const planeColumns = [
     headerName: "Capacity",
     width: 150,
     renderCell: (params) => `${params.row.capacity} seats`,
+  },
+];
+
+export const airportColumns = [
+  {
+    field: "id",
+    headerName: "ID",
+    width: 10,
+  },
+  {
+    field: "name",
+    headerName: "Airport Name",
+    width: 200,
+  },
+  {
+    field: "city",
+    headerName: "City",
+    width: 150,
+  },
+  {
+    field: "country",
+    headerName: "Country",
+    width: 150,
+  },
+  {
+    field: "iata_code",
+    headerName: "IATA Code",
+    width: 100,
+  },
+];
+
+export const flightColumns = [
+  {
+    field: "flight_id",
+    headerName: "ID",
+    width: 70,
+  },
+  {
+    field: "airplane_id",
+    headerName: "Airplane ID",
+    width: 120,
+  },
+  {
+    field: "departure_airport",
+    headerName: "Departure Airport",
+    width: 200,
+    renderCell: (params) => params.row.departure_airport || "N/A", // Hiển thị tên sân bay khởi hành
+  },
+  {
+    field: "arrival_airport",
+    headerName: "Arrival Airport",
+    width: 200,
+    renderCell: (params) => params.row.arrival_airport || "N/A", // Hiển thị tên sân bay đến
+  },
+  {
+    field: "departure_time",
+    headerName: "Departure Time",
+    width: 180,
+    renderCell: (params) => new Date(params.row.departure_time).toLocaleString(), // Format thời gian
+  },
+  {
+    field: "arrival_time",
+    headerName: "Arrival Time",
+    width: 180,
+    renderCell: (params) => new Date(params.row.arrival_time).toLocaleString(),
+  },
+  {
+    field: "ticket_price",
+    headerName: "Price (USD)",
+    width: 120,
+    renderCell: (params) => {
+      const price = params.row.ticket_price;
+      return price !== undefined && price !== null
+        ? `$${price.toFixed(2)}`
+        : "N/A"; // Hiển thị "N/A" nếu giá trị không hợp lệ
+    },
+  },
+  {
+    field: "status",
+    headerName: "Status",
+    width: 120,
+    renderCell: (params) => {
+      const status = params.row.status;
+      const statusColors = {
+        Scheduled: "#4caf50",
+        Delayed: "#ff9800",
+        Canceled: "#f44336",
+        Completed: "#2196f3",
+      };
+      return (
+        <span
+          style={{
+            color: "#fff",
+            backgroundColor: statusColors[status] || "#757575",
+            padding: "5px 10px",
+            borderRadius: "5px",
+          }}
+        >
+          {status}
+        </span>
+      );
+    },
   },
 ];
 
@@ -134,6 +241,7 @@ export const roomColumns = [
     width: 100,
   },
 ];
+
 export const notificationColumns = [
   { field: "_id", headerName: "ID", width: 70 },
   {

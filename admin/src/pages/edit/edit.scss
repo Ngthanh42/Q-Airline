@@ -5,6 +5,11 @@
   .newContainer {
     flex: 6;
 
+    h1 {
+      color: rgb(0, 0, 0);
+      font-size: 20px;
+    }
+
     .top,
     .bottom {
       -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
@@ -12,11 +17,8 @@
       padding: 10px;
       margin: 20px;
       display: flex;
-
-      h1 {
-        color: rgb(0, 0, 0);
-        font-size: 20px;
-      }
+      align-items: center;
+      justify-content: space-between;
 
       .left {
         flex: 1;
@@ -53,7 +55,8 @@
               }
             }
 
-            input, select {
+            input,
+            select {
               width: 100%;
               padding: 5px;
               border: none;
@@ -108,6 +111,80 @@
             }
           }
         }
+      }
+    }
+
+    .seatingChart {
+      margin-top: 20px;
+    }
+
+    .seatingGrid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr); // 10 ghế mỗi hàng
+      gap: 5px;
+      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+      padding: 10px;
+      margin: 20px;
+    }
+
+    .seat {
+      width: 30px;
+      height: 30px;
+      text-align: center;
+      line-height: 30px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .seat.economy {
+      background-color: #87ceeb; // Màu xanh
+    }
+
+    .seat.business {
+      background-color: #6a5acd; // Màu tím
+    }
+
+    .seat.first {
+      background-color: #ffcc00; // Màu vàng
+    }
+
+    .seat.occupied {
+      background-color: gray;
+      color: white;
+    }
+
+    .seat.add-seat {
+      background-color: #4caf50;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    .seat.add-seat:hover {
+      background-color: #45a049;
+    }
+
+    .legend {
+      margin-top: 10px;
+      display: flex;
+      gap: 20px;
+      padding: 10px;
+      margin: 20px;
+
+      .legendItem {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .legendItem .seat {
+        width: 20px;
+        height: 20px;
+        border: 1px solid #ccc;
       }
     }
   }

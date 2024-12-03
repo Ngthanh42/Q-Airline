@@ -4,18 +4,35 @@ import List from "./pages/list/List";
 import Single from "./pages/single/Single";
 import New from "./pages/new/New";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { NotificationInputs, planeInputs, productInputs, userInputs } from "./formSource";
+import {
+  NotificationInputs,
+  planeInputs,
+  seatInputs,
+  userInputs,
+  flightInputs,
+  airportInputs
+} from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/AuthContext";
-import { planeColumns, notificationColumns, roomColumns, ticketColumns, userColumns } from "./datatablesource";
-import NewRoom from "./pages/newRoom/NewRoom";
+import {
+  planeColumns,
+  notificationColumns,
+  flightColumns,
+  ticketColumns,
+  userColumns,
+  airportColumns
+} from "./datatablesource";
 import Account from "./pages/account/Account";
 import Log from "./pages/log/Log";
 import NewNotify from "./pages/newNotify/NewNotify";
 import Edit from "./pages/edit/Edit";
 import NewPlane from "./pages/newPlane/NewPlane";
+import SeatDetails from "./pages/seat/SeatDetails";
+import NewSeat from "./pages/newSeat/NewSeat";
+import NewFlight from "./pages/newFlight/NewFlight";
+import NewAirport from "./pages/newAirport/NewAirport";
 
 
 function App() {
@@ -44,6 +61,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route path="users">
               <Route
                 index
@@ -115,34 +133,93 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path=":airplanesId/seat/:seatId"
+                element={
+                  <ProtectedRoute>
+                    <SeatDetails inputs={seatInputs} />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path=":airplanesId/seat/new"
+                element={
+                  <ProtectedRoute>
+                    <NewSeat inputs={seatInputs} />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
 
-            <Route path="rooms">
+            <Route path="airplane-flights">
               <Route
                 index
                 element={
                   <ProtectedRoute>
-                    <List columns={roomColumns} />
+                    <List columns={flightColumns} />
                   </ProtectedRoute>
                 }
               />
+
               <Route
-                path=":productId"
+                path=":flightId"
                 element={
                   <ProtectedRoute>
                     <Single />
                   </ProtectedRoute>
                 }
               />
+
               <Route
                 path="new"
                 element={
                   <ProtectedRoute>
-                    <NewRoom />
+                    <NewFlight inputs={flightInputs} title="Add New Flight" />
                   </ProtectedRoute>
                 }
               />
             </Route>
+
+            <Route path="airports">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <List columns={airportColumns} />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path=":id"
+                element={
+                  <ProtectedRoute>
+                    <Single />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="new"
+                element={
+                  <ProtectedRoute>
+                    <NewAirport inputs={airportInputs} title="Add New Airport" />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <Edit inputs={airportInputs} title="Edit Airport" />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
             <Route path="account">
               <Route
                 index
@@ -154,6 +231,7 @@ function App() {
               />
             </Route>
           </Route>
+
           <Route path="logs">
             <Route
               index
@@ -164,6 +242,7 @@ function App() {
               }
             />
           </Route>
+
           <Route path="notifications">
             <Route
               index
@@ -191,6 +270,7 @@ function App() {
             />
 
           </Route>
+
           <Route path="tickets">
             <Route
               index

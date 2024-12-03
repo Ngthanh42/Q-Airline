@@ -39,7 +39,7 @@ const Datatable = ({ columns }) => {
       const res = await axiosInstance.get(`/api/${path}`);
       setList(res.data);
       closeModal(); // Đóng modal sau khi xóa
-      toast.success("User deleted successfully!");
+      toast.success("Deleted successfully!");
       setTimeout(() => {
         window.location.reload();
       }, 4000);      

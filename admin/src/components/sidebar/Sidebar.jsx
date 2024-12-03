@@ -1,10 +1,10 @@
 import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import LocalShippingIcon from "@mui/icons-material/LocalShipping";
+import ConnectingAirportsIcon from '@mui/icons-material/ConnectingAirports';
 import CreditCardIcon from "@mui/icons-material/CreditCard";
 import AirplanemodeActiveIcon from '@mui/icons-material/AirplanemodeActive';
-import InsertChartIcon from "@mui/icons-material/InsertChart";
+import AirplaneTicketIcon from '@mui/icons-material/AirplaneTicket';
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
@@ -63,19 +63,21 @@ const Sidebar = () => {
               <span>Planes</span>
             </li>
           </Link>
-          <Link to="/rooms" style={{ textDecoration: "none" }}>
+          <Link to="/airplane-flights" style={{ textDecoration: "none" }}>
             <li>
               <CreditCardIcon className="icon" />
-              <span>Rooms</span>
+              <span>Flights</span>
             </li>
           </Link>
-          <li>
-            <LocalShippingIcon className="icon" />
-            <span>Delivery</span>
-          </li>
+          <Link to="/airports" style={{ textDecoration: "none" }}>
+            <li>
+              <ConnectingAirportsIcon className="icon" />
+              <span>Airport</span>
+            </li>
+          </Link>
           <p className="title">USEFUL</p>
           <li>
-            <InsertChartIcon className="icon" />
+            <AirplaneTicketIcon className="icon" />
             <Link to="/tickets" style={{ textDecoration: "none" }}>
               <span>Tickets </span>
             </Link>

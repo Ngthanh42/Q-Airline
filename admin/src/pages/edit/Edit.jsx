@@ -3,7 +3,7 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import Navbar from "../../components/navbar/Navbar";
 import DriveFolderUploadOutlinedIcon from "@mui/icons-material/DriveFolderUploadOutlined";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axiosInstance from "../../config/axiosInstance";
@@ -12,10 +12,13 @@ import dayjs from "dayjs";
 import useFetch from "../../hooks/useFetch";
 
 const Edit = ({ inputs, title }) => {
+  const navigate = useNavigate();
+
   const [file, setFile] = useState("");
   const [info, setInfo] = useState({});
   const [showPasswords, setShowPasswords] = useState({});
   const [errors, setErrors] = useState({});
+  const [seats, setSeats] = useState([]);
 
   const location = useLocation();
   const id = location.pathname.split("/")[3];
@@ -31,8 +34,28 @@ const Edit = ({ inputs, title }) => {
     }
   }, [data]);
 
+  useEffect(() => {
+    const fetchSeats = async () => {
+      if (path === "airplanes") {
+        try {
+          const response = await axiosInstance.get(`/api/airplane-seats/${id}`);
+          setSeats(response.data);
+        } catch (err) {
+          console.error("Error fetching seats:", err);
+        }
+      }
+    };
+
+    fetchSeats();
+    console.log(seats);
+  }, [path, id]);
+
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
+  };
+
+  const handleBack = () => {
+    navigate(-1); // Quay lại trang trước đó
   };
 
   const togglePasswordVisibility = (id) => {
@@ -42,7 +65,7 @@ const Edit = ({ inputs, title }) => {
     }));
   };
 
-  console.log(info)
+  console.log(info);
 
   const handleClick = async (e) => {
     e.preventDefault();
@@ -52,42 +75,81 @@ const Edit = ({ inputs, title }) => {
       return;
     }
 
-    const data = new FormData();
-    data.append("file", file);
-    data.append("upload_preset", "upload");
     try {
-      let imageUrl = info.avatar;
+      if (path === "users") {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "upload");
 
-      if (file) {
-        // Chuyển đổi file sang Base64
-        const base64 = await toBase64(file);
+        let imageUrl = info.avatar;
 
-        // Gửi Base64 tới API upload
-        const uploadRes = await axiosInstance.post("/api/upload-avatar", { image: base64, name_folder: "admin_uploads" });
+        if (file) {
+          // Chuyển đổi file sang Base64
+          const base64 = await toBase64(file);
 
-        imageUrl = uploadRes.data.url;
+          // Gửi Base64 tới API upload
+          const uploadRes = await axiosInstance.post("/api/upload-avatar", { image: base64, name_folder: "admin_uploads" });
+
+          imageUrl = uploadRes.data.url;
+        }
+
+        const newUser = {
+          ...info,
+          avatar: imageUrl,
+          role: info.role,
+        };
+
+        await axiosInstance.put(`/api/${path}/${id}`, newUser);
+
+        // Gọi lại API `GET` để lấy dữ liệu mới nhất
+        const res = await axiosInstance.get(`/api/users/${id}`);
+        setInfo({
+          ...res.data,
+          dob: res.data.dob ? dayjs(res.data.dob).format("YYYY-MM-DD") : "",
+        });
+
+        toast.success("Cập nhật thông tin người dùng thành công!");
+      } else if (path === "airplanes") {
+        const data = new FormData();
+        data.append("file", file);
+        data.append("upload_preset", "upload");
+
+        let imageUrl = info.avatar;
+
+        if (file) {
+          // Chuyển đổi file sang Base64
+          const base64 = await toBase64(file);
+
+          // Gửi Base64 tới API upload
+          const uploadRes = await axiosInstance.post("/api/upload-avatar", { image: base64, name_folder: "airplane_uploads" });
+
+          imageUrl = uploadRes.data.url;
+        }
+
+        const newAirplane = {
+          ...info,
+          last_inspection_date: dayjs(info.last_inspection_date).format("YYYY-MM-DD"),
+          avatar: imageUrl,
+        };
+
+        const res = await axiosInstance.put(`/api/${path}/${id}`, newAirplane);
+
+        setInfo({
+          ...res.data,
+          last_inspection_date: res.data.last_inspection_date
+            ? dayjs(res.data.last_inspection_date).format("YYYY-MM-DD")
+            : "",
+        });
+
+        toast.success("Infomation airplane updated successfully");
+      } else if (path === "airports") {
+        const res = await axiosInstance.put(`/api/${path}/${id}`, {...info});
+        toast.success("Infomation airport updated successfully");
       }
-
-      const newUser = {
-        ...info,
-        avatar: imageUrl,
-        role: info.role,
-      };
-
-      await axiosInstance.put(`/api/users/${id}`, newUser);
-
-      // Gọi lại API `GET` để lấy dữ liệu mới nhất
-      const res = await axiosInstance.get(`/api/users/${id}`);
-      setInfo({
-        ...res.data,
-        dob: res.data.dob ? dayjs(res.data.dob).format("YYYY-MM-DD") : "",
-      });
-
-      toast.success("Cập nhật thông tin người dùng thành công!");
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 4000);
     } catch (err) {
       console.error("Lỗi khi tải lên ảnh:", err);
       toast.error("Đã xảy ra lỗi khi cập nhật người dùng!");
@@ -106,36 +168,108 @@ const Edit = ({ inputs, title }) => {
   const validate = () => {
     const newErrors = {};
 
-    // Kiểm tra Username
-    if (!info.username || info.username.trim() === "") {
-      newErrors.username = "Username is required.";
-    }
-
-    // Kiểm tra Email
-    if (!info.email || info.email.trim() === "") {
-      newErrors.email = "Email is required.";
-    } else if (!/^\S+@\S+\.\S+$/.test(info.email)) {
-      newErrors.email = "Invalid email format.";
-    }
-
-    // Kiểm tra Số điện thoại
-    if (!info.phone || info.phone.trim() === "") {
-      newErrors.phone = "Phone number is required.";
-    } else if (!/^\d{10,15}$/.test(info.phone)) {
-      newErrors.phone = "Phone number must be between 10-15 digits.";
-    }
-
-    // Kiểm tra Mật khẩu
-    if (info.password && info.password.trim() !== "") {
-      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(info.password)) {
-        newErrors.password =
-          "Password must be at least 8 characters, include an uppercase letter, a lowercase letter, and a special character.";
+    if (path === "users") {
+      // Kiểm tra Username
+      if (!info.username || info.username.trim() === "") {
+        newErrors.username = "Username is required.";
       }
-    }
 
-    // Kiểm tra Address
-    if (!info.address || info.address.trim() === "") {
-      newErrors.address = "Address is required.";
+      // Kiểm tra Email
+      if (!info.email || info.email.trim() === "") {
+        newErrors.email = "Email is required.";
+      } else if (!/^\S+@\S+\.\S+$/.test(info.email)) {
+        newErrors.email = "Invalid email format.";
+      }
+
+      // Kiểm tra Số điện thoại
+      if (!info.phone || info.phone.trim() === "") {
+        newErrors.phone = "Phone number is required.";
+      } else if (!/^\d{10,15}$/.test(info.phone)) {
+        newErrors.phone = "Phone number must be between 10-15 digits.";
+      }
+
+      // Kiểm tra Mật khẩu
+      if (info.password && info.password.trim() !== "") {
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/.test(info.password)) {
+          newErrors.password =
+            "Password must be at least 8 characters, include an uppercase letter, a lowercase letter, and a special character.";
+        }
+      }
+
+      // Kiểm tra Address
+      if (!info.address || info.address.trim() === "") {
+        newErrors.address = "Address is required.";
+      }
+    } else if (path === "airplanes") {
+      // Kiểm tra Model
+      if (!info.model || info.model.trim() === "") {
+        newErrors.model = "Model is required.";
+      }
+
+      // Kiểm tra Manufacturer
+      if (!info.manufacturer || info.manufacturer.trim() === "") {
+        newErrors.manufacturer = "Manufacturer is required.";
+      }
+
+      // Kiểm tra Year of Manufacture
+      if (!info.year_of_manufacture || isNaN(info.year_of_manufacture)) {
+        newErrors.year_of_manufacture = "Year of manufacture is required and must be a number.";
+      } else if (info.year_of_manufacture < 1900 || info.year_of_manufacture > new Date().getFullYear()) {
+        newErrors.year_of_manufacture = "Year of manufacture must be between 1900 and the current year.";
+      }
+
+      // Kiểm tra Registration Number
+      if (!info.registration_number || info.registration_number.trim() === "") {
+        newErrors.registration_number = "Registration number is required.";
+      }
+
+      // Kiểm tra Fuel Capacity
+      if (!info.fuel_capacity || isNaN(info.fuel_capacity)) {
+        newErrors.fuel_capacity = "Fuel capacity is required and must be a number.";
+      } else if (info.fuel_capacity <= 0) {
+        newErrors.fuel_capacity = "Fuel capacity must be greater than 0.";
+      }
+
+      // Kiểm tra Last Inspection Date
+      if (!info.last_inspection_date || info.last_inspection_date.trim() === "") {
+        newErrors.last_inspection_date = "Last inspection date is required.";
+      } else {
+        const currentDate = new Date();
+        const inspectionDate = new Date(info.last_inspection_date);
+        if (inspectionDate > currentDate) {
+          newErrors.last_inspection_date = "Last inspection date cannot be in the future.";
+        }
+      }
+
+      // Kiểm tra Capacity
+      if (!info.capacity || isNaN(info.capacity)) {
+        newErrors.capacity = "Capacity is required and must be a number.";
+      } else if (info.capacity <= 0) {
+        newErrors.capacity = "Capacity must be greater than 0.";
+      }
+
+      // Kiểm tra Status
+      if (!info.status || info.status.trim() === "") {
+        newErrors.status = "Status is required.";
+      }
+    } else if (path === "airports") {
+      if (!info.name || info.name.trim() === "") {
+        newErrors.name = "Airport name is required.";
+      }
+
+      if (!info.city || info.city.trim() === "") {
+        newErrors.city = "City is required.";
+      }
+
+      if (!info.country || info.country.trim() === "") {
+        newErrors.country = "Country is required.";
+      }
+
+      if (!info.iata_code || info.iata_code.trim() === "") {
+        newErrors.iata_code = "IATA code is required.";
+      } else if (info.iata_code.length !== 3) {
+        newErrors.iata_code = "IATA code must be exactly 3 characters.";
+      }
     }
 
     setErrors(newErrors);
@@ -149,32 +283,48 @@ const Edit = ({ inputs, title }) => {
         <Navbar />
         <div className="top">
           <h1>{title}</h1>
+
+          <button onClick={handleBack} className="backButton">
+            Back Page
+          </button>
         </div>
         <div className="bottom">
-          <div className="left">
-            <img
-              src={
-                file
-                  ? URL.createObjectURL(file)
-                  : info.avatar || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
-              }
-              alt=""
-            />
-          </div>
-          <div className="right">
-            <form onSubmit={handleClick}>
-              <div className="formInput">
-                <label htmlFor="file">
-                  Image: <DriveFolderUploadOutlinedIcon className="icon" />
-                </label>
-                <input
-                  type="file"
-                  id="file"
-                  accept="image/*"
-                  onChange={(e) => setFile(e.target.files[0])}
-                  style={{ display: "none" }}
+          {path === "airports" ? (
+            <></>
+          ) : (
+            <>
+              <div className="left">
+                <img
+                  src={
+                    file
+                      ? URL.createObjectURL(file)
+                      : info.avatar || "https://icon-library.com/images/no-image-icon/no-image-icon-0.jpg"
+                  }
+                  alt=""
                 />
               </div>
+            </>
+          )}
+          <div className="right">
+            <form onSubmit={handleClick}>
+              {path === "airports" ? (
+                <></>
+              ) : (
+                <>
+                  <div className="formInput">
+                    <label htmlFor="file">
+                      Image: <DriveFolderUploadOutlinedIcon className="icon" />
+                    </label>
+                    <input
+                      type="file"
+                      id="file"
+                      accept="image/*"
+                      onChange={(e) => setFile(e.target.files[0])}
+                      style={{ display: "none" }}
+                    />
+                  </div>
+                </>
+              )}
 
               {inputs.map((input) => (
                 <div className="formInput" key={input.id}>
@@ -221,7 +371,7 @@ const Edit = ({ inputs, title }) => {
                       }
                     />
                   )}
-                  
+
                   {/* Hiển thị lỗi */}
                   {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
                 </div>
@@ -231,6 +381,46 @@ const Edit = ({ inputs, title }) => {
             </form>
           </div>
         </div>
+
+        {path === "airplanes" && (
+          <div className="seatingChart">
+            <div className="top">
+              <h1>Seating Chart</h1>
+            </div>
+
+            <div className="seatingGrid">
+              {seats.map((seat) => (
+                <div
+                  key={seat.seat_number}
+                  className={`seat ${seat.is_occupied ? "occupied" : "available"} ${seat.seat_class.toLowerCase()
+                    }`}
+                  onClick={() => navigate(`/airplanes/${id}/seat/${seat.seat_id}`)}
+                >
+                  {seat.seat_number}
+                </div>
+              ))}
+
+              <div
+                className="seat add-seat"
+                onClick={() => navigate(`/airplanes/${id}/seat/new`)}
+              >
+                + Add Seat
+              </div>
+            </div>
+
+            <div className="legend">
+              <div className="legendItem">
+                <span className="seat business"></span> Business
+              </div>
+              <div className="legendItem">
+                <span className="seat first"></span> First
+              </div>
+              <div className="legendItem">
+                <span className="seat economy"></span> Economy
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

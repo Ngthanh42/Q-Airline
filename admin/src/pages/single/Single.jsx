@@ -15,7 +15,7 @@ const Single = () => {
   const id = location.pathname.split("/")[2];
   const path = location.pathname.split("/")[1];
 
-  const [info, setInfo] = useState(null); // Lưu thông tin người dùng
+  const [info, setInfo] = useState(null); // Lưu thông tin đối tượng
   const { data, loading, error } = useFetch(`/api/${path}/${id}`);
 
   useEffect(() => {
@@ -37,11 +37,17 @@ const Single = () => {
             <div className="editButton" onClick={() => navigate(`/${path}/edit/${id}`)}>Edit</div>
             <h1 className="title">Information</h1>
             <div className="item">
-              <img
-                src={info?.avatar || "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"}
-                alt=""
-                className="itemImg"
-              />
+              {path === "airports" ? (
+                <></>
+              ) : (
+                <>
+                <img
+                  src={info?.avatar || "https://images.pexels.com/photos/733872/pexels-photo-733872.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260"}
+                  alt=""
+                  className="itemImg"
+                />
+              </>
+              )}
               <div className="details">
                 {path === "users" ? (
                   <>
@@ -93,6 +99,22 @@ const Single = () => {
                     <div className="detailItem">
                       <span className="itemKey">Status:</span>
                       <span className={`itemValue ${info?.status}`}>{info?.status || "N/A"}</span>
+                    </div>
+                  </>
+                ) : path === "airports" ? (
+                  <>
+                    <h1 className="itemTitle">{info?.name || "N/A"}</h1>
+                    <div className="detailItem">
+                      <span className="itemKey">City:</span>
+                      <span className="itemValue">{info?.city || "N/A"}</span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">Country:</span>
+                      <span className="itemValue">{info?.country || "N/A"}</span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">IATA Code:</span>
+                      <span className="itemValue">{info?.iata_code || "N/A"}</span>
                     </div>
                   </>
                 ) : (
