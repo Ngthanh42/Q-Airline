@@ -1,7 +1,7 @@
 import React from "react";
-import './modal.scss';
+import './modalConfirmDelete.scss';
 
-const Modal = ({ show, onClose, onConfirm, entity }) => {
+const ModalConfirmDelete = ({ show, onClose, onConfirm, entity }) => {
   if (!show) return null;
 
   return (
@@ -24,4 +24,4 @@ const Modal = ({ show, onClose, onConfirm, entity }) => {
   );
 };
 
-export default Modal;
+export default ModalConfirmDelete;

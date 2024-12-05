@@ -14,7 +14,8 @@ import { createAirplane,
     getFlights,
     getFlightById,
     updateFlight,
-    deleteFlight
+    deleteFlight,
+    updateFlightDepartureTime
  } from "../controller/airplaneController.js";
 
 const router = express.Router();
@@ -40,5 +41,6 @@ router.get("/airplane-flights", getFlights);
 router.get("/airplane-flights/:flight_id", getFlightById);
 router.put("/airplane-flights/:flight_id", updateFlight);
 router.delete("/airplane-flights/:flight_id", deleteFlight);
+router.put("/airplane-flights/time/:flight_id", updateFlightDepartureTime);
 
 export default router;

@@ -11,19 +11,24 @@ const NewFlight = ({ inputs, title }) => {
     const [info, setInfo] = useState({});
     const [errors, setErrors] = useState({});
     const [airplanes, setAirplanes] = useState([]);
+    const [airports, setAirports] = useState([]);
 
     useEffect(() => {
-        const fetchAirplanes = async () => {
+        const fetchAirplanesAndAirports = async () => {
             try {
-                const response = await axiosInstance.get("/api/airplanes"); // API danh sách máy bay
-                setAirplanes(response.data); // Gán dữ liệu máy bay vào state
+                const airplaneRes = await axiosInstance.get("/api/airplanes"); // API danh sách máy bay
+                const airportRes = await axiosInstance.get("/api/airports"); // API danh sách sân bay
+
+                setAirplanes(airplaneRes.data);
+                console.log(airports)
+                setAirports(airportRes.data);
             } catch (error) {
-                console.error("Failed to fetch airplanes:", error);
-                toast.error("Failed to fetch airplane list.");
+                console.error("Failed to fetch airplanes or airports:", error);
+                toast.error("Failed to fetch data. Please try again.");
             }
         };
 
-        fetchAirplanes();
+        fetchAirplanesAndAirports();
     }, []);
 
     const handleChange = (e) => {
@@ -44,7 +49,7 @@ const NewFlight = ({ inputs, title }) => {
 
         try {
             // Gửi dữ liệu chuyến bay đến API
-            await axiosInstance.post("/api/flights", info);
+            await axiosInstance.post("/api/airplane-flights", info);
             toast.success("Flight created successfully!");
             setInfo({}); // Làm trống form
         } catch (err) {
@@ -94,8 +99,22 @@ const NewFlight = ({ inputs, title }) => {
                                         >
                                             <option value="">Select Airplane</option>
                                             {airplanes.map((airplane) => (
-                                                <option key={airplane.airplane_id} value={airplane.airplane_id}>
-                                                    {airplane.model} ({airplane.registration_number})
+                                                <option key={airplane.id} value={airplane.id}>
+                                                    {airplane.model} ({airplane.id})
+                                                </option>
+                                            ))}
+                                        </select>
+                                    ) : input.id === "departure_airport_id" || input.id === "arrival_airport_id" ? (
+                                        // Dropdown danh sách sân bay
+                                        <select
+                                            id={input.id}
+                                            value={info[input.id] || ""}
+                                            onChange={handleChange}
+                                        >
+                                            <option value="">Select Airport</option>
+                                            {airports.map((airport) => (
+                                                <option key={airport.id} value={airport.id}>
+                                                    {airport.name} ({airport.iata_code})
                                                 </option>
                                             ))}
                                         </select>

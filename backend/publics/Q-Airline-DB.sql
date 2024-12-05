@@ -117,8 +117,6 @@ CREATE TABLE flights (
     departure_time DATETIME NOT NULL,
     arrival_time DATETIME NOT NULL,
     actual_departure_time DATETIME NULL,
-    ticket_price DECIMAL(10, 2) NOT NULL,
-    ticket_class ENUM('Economy', 'Business', 'First') DEFAULT 'Economy',
     status ENUM('Scheduled', 'Delayed', 'Canceled', 'Completed') DEFAULT 'Scheduled',
     FOREIGN KEY (airplane_id) REFERENCES airplanes(airplane_id),
     FOREIGN KEY (departure_airport_id) REFERENCES airports(airport_id),

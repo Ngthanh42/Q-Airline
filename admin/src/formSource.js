@@ -217,12 +217,6 @@ export const flightInputs = [
     type: "datetime-local",
   },
   {
-    id: "ticket_price",
-    label: "Ticket Price",
-    type: "number",
-    placeholder: "Enter ticket price",
-  },
-  {
     id: "status",
     label: "Status",
     type: "select",

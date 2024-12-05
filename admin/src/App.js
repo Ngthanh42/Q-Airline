@@ -180,6 +180,15 @@ function App() {
                   </ProtectedRoute>
                 }
               />
+
+              <Route
+                path="edit/:id"
+                element={
+                  <ProtectedRoute>
+                    <Edit inputs={flightInputs} title="Edit Flight" />
+                  </ProtectedRoute>
+                }
+              />
             </Route>
 
             <Route path="airports">
