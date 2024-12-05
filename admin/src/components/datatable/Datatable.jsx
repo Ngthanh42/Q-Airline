@@ -99,6 +99,19 @@ const Datatable = ({ columns }) => {
     }
   };
 
+  const handleCancelBooking = async (id) => {
+    try {
+      await axiosInstance.put(`/api/tickets/${id}/cancel`);
+      toast.success("Booking canceled successfully!");
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to cancel booking:", error);
+      toast.error("Failed to cancel booking. Please try again.");
+    }
+  };
+
   const actionColumn = [
     {
       field: "action",
@@ -117,6 +130,7 @@ const Datatable = ({ columns }) => {
             >
               Delete
             </div>
+
             {path === "airplane-flights" && (
               <div
                 className="delayButton"
@@ -125,6 +139,15 @@ const Datatable = ({ columns }) => {
                 }
               >
                 Delay
+              </div>
+            )}
+
+            {path === "tickets" && (
+              <div
+                className="cancelBookingButton"
+                onClick={() => handleCancelBooking(params.row.id)}
+              >
+                Cancel
               </div>
             )}
           </div>

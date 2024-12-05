@@ -10,7 +10,8 @@ import {
   seatInputs,
   userInputs,
   flightInputs,
-  airportInputs
+  airportInputs,
+  ticketInputs
 } from "./formSource";
 import "./style/dark.scss";
 import { useContext } from "react";
@@ -22,7 +23,7 @@ import {
   flightColumns,
   ticketColumns,
   userColumns,
-  airportColumns
+  airportColumns,
 } from "./datatablesource";
 import Account from "./pages/account/Account";
 import Log from "./pages/log/Log";
@@ -33,11 +34,11 @@ import SeatDetails from "./pages/seat/SeatDetails";
 import NewSeat from "./pages/newSeat/NewSeat";
 import NewFlight from "./pages/newFlight/NewFlight";
 import NewAirport from "./pages/newAirport/NewAirport";
+import NewTicket from "./pages/newTicket/NewTicket";
 
 
 function App() {
   const { darkMode } = useContext(DarkModeContext);
-  const apiUrl = process.env.REACT_APP_API_URL;
 
   const ProtectedRoute = ({ children }) => {
     const { user } = useContext(AuthContext);
@@ -229,6 +230,26 @@ function App() {
               />
             </Route>
 
+            <Route path="tickets">
+              <Route
+                index
+                element={
+                  <ProtectedRoute>
+                    <List columns={ticketColumns} />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="new"
+                element={
+                  <ProtectedRoute>
+                    <NewTicket inputs={ticketInputs} title="Add New Ticket" />
+                  </ProtectedRoute>
+                }
+              />
+            </Route>
+
             <Route path="account">
               <Route
                 index
@@ -278,33 +299,6 @@ function App() {
               }
             />
 
-          </Route>
-
-          <Route path="tickets">
-            <Route
-              index
-              element={
-                <ProtectedRoute>
-                  <List columns={ticketColumns} />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path=":ticketId"
-              element={
-                <ProtectedRoute>
-                  <Single />
-                </ProtectedRoute>
-              }
-            />
-            <Route
-              path="new"
-              element={
-                <ProtectedRoute>
-                  <NewNotify inputs={NotificationInputs} title="Add New User" />
-                </ProtectedRoute>
-              }
-            />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -9,6 +9,7 @@ import uploadRoutes from "./Routes/uploadRoute.js";
 import roleRoutes from "./Routes/roleRouters.js";
 import airplaneRoutes from "./Routes/airplaneRoutes.js";
 import airportRoutes from "./Routes/airportRoutes.js";
+import ticketRoutes from "./Routes/ticketRoutes.js";
 
 dotenv.config();
 
@@ -30,6 +31,7 @@ app.use("/api", uploadRoutes);
 app.use("/api", roleRoutes);
 app.use("/api", airplaneRoutes);
 app.use("/api", airportRoutes);
+app.use("/api", ticketRoutes);
 
 app.get('/', (req, res) => {
   res.send('API is running...');
