@@ -601,7 +601,7 @@ const Edit = ({ inputs, title }) => {
                 className="seat add-seat"
                 onClick={() => navigate(`/airplanes/${id}/seat/new`)}
               >
-                + Add Seat
+                +
               </div>
             </div>
 

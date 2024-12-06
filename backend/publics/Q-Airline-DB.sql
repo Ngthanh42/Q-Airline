@@ -12,6 +12,7 @@ CREATE TABLE users (
     birth_date DATE DEFAULT NULL,
     country VARCHAR(100) DEFAULT NULL,
     address VARCHAR(255) DEFAULT NULL,
+    gender ENUM('Male', 'Female', 'Other') DEFAULT 'Other',
     is_email_verified BOOLEAN DEFAULT FALSE,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

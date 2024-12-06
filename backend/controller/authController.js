@@ -4,7 +4,7 @@ import { findUserByEmail, createUser, assignRoleToUser } from '../models/userMod
 import { getUserRole } from '../data/getUserMeLoader.js'
 
 export const register = async (req, res) => {
-  const { full_name, email, password, phone, address, country, dob, role, avatar } = req.body;
+  const { full_name, email, password, phone, address, country, gender, dob, role, avatar } = req.body;
 
   try {
     // Kiểm tra email đã tồn tại chưa
@@ -18,7 +18,7 @@ export const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Tạo người dùng mới
-    const userId = await createUser(full_name, email, hashedPassword, phone, address, country, dob, avatar);
+    const userId = await createUser(full_name, email, hashedPassword, phone, address, country, gender, dob, avatar);
     const roleToAssign = role || 'Customer';
     const roleAssigned = await assignRoleToUser(userId, roleToAssign);
 

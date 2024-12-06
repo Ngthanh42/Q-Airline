@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 
-import Navbar from './components/Navbar/Navbar';
+import Navbar from './components/navbar/navbar';
 import Home from './components/home/home';
 import Search from './components/search/search';
 import Support from './components/support/support';
@@ -12,8 +12,17 @@ import Subscribe from './components/subscribers/subscribe';
 import Footer from './components/footer/footer';
 import SignIn from './components/auth/signin/signin';
 import SignUp from './components/auth/signup/signup';
+import { AuthContext } from './components/context/AuthContext';
 
 const App = () => {
+  const ProtectedRoute = ({ children }) => {
+    const { user } = useContext(AuthContext);
+    if (!user) {
+      return <Navigate to="/signin" />;
+    }
+    return children;
+  };
+
   return (
     <Router>
       <Navbar />
@@ -34,8 +43,12 @@ const App = () => {
           }
         />
 
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/signin" element={
+          <SignIn />
+        } />
+        <Route path="/signup" element={
+          <SignUp />
+        } />
       </Routes>
       <Footer />
     </Router>

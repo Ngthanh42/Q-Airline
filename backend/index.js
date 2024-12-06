@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: "http://localhost:3000", // Địa chỉ frontend
+  origin: ["http://localhost:3000", "http://localhost:5173"], // Địa chỉ frontend và admin
   credentials: true, // Nếu cần cookie hoặc thông tin xác thực
 }));
 app.use(bodyParser.json({ limit: '10mb' }));
