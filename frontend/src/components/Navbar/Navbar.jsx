@@ -54,23 +54,23 @@ const Navbar = () => {
                 </div>
 
                 <div className={active}>
-                    <ul className="menu flex">
-                        <li onClick={removeNavBar} className="listItem">
-                            <Link to="/">Home</Link>
-                        </li>
-                        <li onClick={removeNavBar} className="listItem">
-                            <Link to="/about-us">About</Link>
-                        </li>
-                        <li onClick={removeNavBar} className="listItem">
-                            <Link to="">Offers</Link>
-                        </li>
-                        <li onClick={removeNavBar} className="listItem">
-                            <Link to="">Seats</Link>
-                        </li>
-                        <li onClick={removeNavBar} className="listItem">
-                            <Link to="">Destinations</Link>
-                        </li>
-                    </ul>
+                <ul className="menu flex">
+                    <li onClick={removeNavBar} className="listItem">
+                        <Link to="/">Home</Link>
+                    </li>
+                    <li onClick={removeNavBar} className="listItem">
+                        <Link to="/about_us">About</Link>
+                    </li>
+                    <li onClick={removeNavBar} className="listItem">
+                        <Link to="/offers">Offers</Link>
+                    </li>
+                    <li onClick={removeNavBar} className="listItem">
+                        <Link to="/seats">Seats</Link>
+                    </li>
+                    <li onClick={removeNavBar} className="listItem">
+                        <Link to="/destinations">Destinations</Link>
+                    </li>
+                </ul>
 
                     <button onClick={removeNavBar} className="btn flex btnOne">
                         Contact
