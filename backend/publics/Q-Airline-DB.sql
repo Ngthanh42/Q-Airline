@@ -83,7 +83,7 @@ CREATE TABLE airplanes (
     manufacturer VARCHAR(100),
     year_of_manufacture YEAR,
     capacity INT NOT NULL,
-    status ENUM('Active', 'Maintenance', 'Retired') DEFAULT 'active',
+    status ENUM('Active', 'Maintenance', 'Retired') DEFAULT 'Active',
 	registration_number VARCHAR(50) UNIQUE,
 	fuel_capacity DECIMAL(10,2),
 	last_inspection_date DATE,

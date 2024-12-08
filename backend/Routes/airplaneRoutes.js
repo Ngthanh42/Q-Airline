@@ -12,6 +12,7 @@ import { createAirplane,
     deleteAirplane,
     createFlight,
     getFlights,
+    getFlightsByAirplaneId,
     getFlightById,
     updateFlight,
     deleteFlight,
@@ -38,6 +39,7 @@ router.get("/airplane-seats/:airplane_id/available", getAvailableSeats);
 // Route chuyến bay
 router.post("/airplane-flights", createFlight);
 router.get("/airplane-flights", getFlights);
+router.get("/airplane-flights/:airplane_id", getFlightsByAirplaneId);
 router.get("/airplane-flights/:flight_id", getFlightById);
 router.put("/airplane-flights/:flight_id", updateFlight);
 router.delete("/airplane-flights/:flight_id", deleteFlight);

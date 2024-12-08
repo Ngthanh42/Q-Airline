@@ -9,7 +9,6 @@ import { getAllTickets,
 
 const router = express.Router();
 
-// Route: Lấy danh sách người dùng
 router.get("/tickets", getAllTickets);
 router.get("/tickets/:ticket_id", getTicketById);
 router.post("/tickets", addTicket);

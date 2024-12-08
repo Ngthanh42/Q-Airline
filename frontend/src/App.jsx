@@ -12,7 +12,11 @@ import Subscribe from './components/subscribers/subscribe';
 import Footer from './components/footer/footer';
 import SignIn from './components/auth/signin/signin';
 import SignUp from './components/auth/signup/signup';
+import AboutPage from './components/pages/about-us/about-us';
+
 import { AuthContext } from './components/context/AuthContext';
+import FlightsList from './components/pages/flight/flight-list';
+import AirplaneDetails from './components/pages/airplane/airplane-detail';
 
 const App = () => {
   const ProtectedRoute = ({ children }) => {
@@ -25,13 +29,13 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar />
       <Routes>
         {/* Route home page */}
         <Route
           path="/"
           element={
             <div>
+              <Navbar />
               <Home />
               <Search />
               <Support />
@@ -39,18 +43,66 @@ const App = () => {
               <Lounge />
               <Travelers />
               <Subscribe />
+              <Footer />
             </div>
           }
         />
 
-        <Route path="/signin" element={
-          <SignIn />
-        } />
-        <Route path="/signup" element={
-          <SignUp />
-        } />
+        <Route
+          path="/about-us"
+          element={
+            <>
+              <Navbar />
+              <AboutPage />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/signin"
+          element={
+            <>
+              <Navbar />
+              <SignIn />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/signup"
+          element={
+            <>
+              <Navbar />
+              <SignUp />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/flight-list"
+          element={
+            <>
+              <Navbar />
+              <FlightsList />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/airplane-information/:id"
+          element={
+            <>
+              <Navbar />
+              <AirplaneDetails />
+              <Footer />
+            </>
+          }
+        />
       </Routes>
-      <Footer />
     </Router>
   )
 }

@@ -459,6 +459,41 @@ export const getFlights = async (req, res) => {
     }
 };
 
+// Danh sách chuyến bay của một máy bay cụ thể
+export const getFlightsByAirplaneId = async (req, res) => {
+    const { airplane_id } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            `SELECT 
+                f.flight_id AS id,
+                f.departure_time,
+                f.arrival_time,
+                TIMESTAMPDIFF(MINUTE, f.departure_time, f.arrival_time) AS duration_minutes,
+                f.status,
+                a1.name AS departure_airport,
+                a2.name AS arrival_airport,
+                ap.model AS airplane_model,
+                ap.registration_number AS airplane_registration_number
+            FROM flights f
+            JOIN airports a1 ON f.departure_airport_id = a1.airport_id
+            JOIN airports a2 ON f.arrival_airport_id = a2.airport_id
+            JOIN airplanes ap ON f.airplane_id = ap.airplane_id
+            WHERE f.airplane_id = ?`,
+            [airplane_id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "No flights found for this airplane." });
+        }
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching flights for airplane:", error);
+        res.status(500).json({ message: "Server error. Please try again later." });
+    }
+};
+
 // Thông tin chuyến bay cụ thể (lấy theo id)
 export const getFlightById = async (req, res) => {
     const { flight_id } = req.params;
