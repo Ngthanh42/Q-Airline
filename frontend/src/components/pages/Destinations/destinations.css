@@ -1,0 +1,113 @@
+/* Global Styles */
+.destinations-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Page Title */
+  .destinations-title {
+    text-align: center;
+    font-size: 2.5rem;
+    color: #1e40af;
+    font-weight: bold;
+    margin-top: 10rem;
+    margin-bottom: 2rem;
+  }
+  
+  /* Destinations Content Layout */
+  .destinations-content {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+  }
+  
+  /* Destinations List Styles */
+  .destinations-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .destination-card {
+    display: flex;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .destination-card:hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .destination-card.active {
+    border: 2px solid #2563eb;
+  }
+  
+  .destination-image {
+    width: 250px;
+    height: 150px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .destination-info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .destination-name {
+    font-size: 1.5rem;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+  }
+  
+  .destination-description {
+    color: #6b7280;
+  }
+
+  /* Map. */
+  .map-container {
+    width: 100%;
+    height: 650px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Call to Action Styling */
+.destinations-cta {
+  text-align: center;
+  background-color: #f1f5f9;
+  padding: 2rem;
+  margin-top: 2rem;
+  border-radius: 10px;
+}
+
+.destinations-cta h3 {
+  font-size: 1.75rem;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.book-flight-btn {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.book-flight-btn:hover {
+  background-color: #2980b9;
+}
