@@ -18,21 +18,17 @@ const Edit = ({ inputs, title }) => {
   const [info, setInfo] = useState({});
   const [showPasswords, setShowPasswords] = useState({});
   const [errors, setErrors] = useState({});
+
   const [seats, setSeats] = useState([]);
+
+  const [airplaneRes, setAirplaneRes] = useState([]); // State lưu dữ liệu máy bay
+  const [airportRes, setAirportRes] = useState([]);   // State lưu dữ liệu sân bay
+  const [inputsState, setInputsState] = useState(inputs);
 
   const location = useLocation();
   const id = location.pathname.split("/")[3];
   const path = location.pathname.split("/")[1];
   const { data, loading, error } = useFetch(`/api/${path}/${id}`);
-
-  useEffect(() => {
-    if (data) {
-      setInfo({
-        ...data,
-        dob: data.dob ? dayjs(data.dob).format("YYYY-MM-DD") : "",
-      });
-    }
-  }, [data]);
 
   useEffect(() => {
     const fetchSeats = async () => {
@@ -49,6 +45,81 @@ const Edit = ({ inputs, title }) => {
     fetchSeats();
     console.log(seats);
   }, [path, id]);
+
+  useEffect(() => {
+    const fetchAirplanesAndAirports = async () => {
+      try {
+        const airplaneRes = await axiosInstance.get("/api/airplanes");
+        const airportRes = await axiosInstance.get("/api/airports");
+
+        // Chuẩn hóa mảng options
+        const airplaneOptions = airplaneRes.data?.map((airplane) => ({
+          value: airplane.id, // Sử dụng `id` thay vì `airplane_id`
+          label: `${airplane.model} (${airplane.registration_number})`,
+        })) || [];
+
+        const airportOptions = airportRes.data?.map((airport) => ({
+          value: airport.id, // Sử dụng `id` thay vì `airport_id`
+          label: `${airport.name}, ${airport.city} (${airport.country})`,
+        })) || [];
+
+        setAirplaneRes(airplaneRes.data);
+        setAirportRes(airportRes.data);
+
+        // Cập nhật inputsState
+        setInputsState((prevInputs) =>
+          prevInputs.map((input) => {
+            if (input.id === "airplane_id") {
+              return { ...input, options: airplaneOptions };
+            }
+            if (input.id === "departure_airport_id" || input.id === "arrival_airport_id") {
+              return { ...input, options: airportOptions };
+            }
+            return input;
+          })
+        );
+      } catch (error) {
+        console.error("Failed to fetch airplanes or airports:", error);
+        toast.error("Failed to fetch data. Please try again.");
+      }
+    };
+
+    fetchAirplanesAndAirports();
+  }, []);
+
+  useEffect(() => {
+    if (path === "airplane-flights" && data) {
+      setInfo({
+        ...data,
+        airplane_id: airplaneRes.find(
+          (airplane) =>
+            airplane.model === data.airplane_model &&
+            airplane.registration_number === data.registration_number
+        )?.id || "",
+
+        departure_airport_id: airportRes.find(
+          (airport) =>
+            airport.name === data.departure_airport &&
+            airport.city === data.departure_city &&
+            airport.country === data.departure_country
+        )?.id || "",
+
+        arrival_airport_id: airportRes.find(
+          (airport) =>
+            airport.name === data.arrival_airport &&
+            airport.city === data.arrival_city &&
+            airport.country === data.arrival_country
+        )?.id || "",
+
+        status: data.status,
+      });
+    } else if (data) {
+      setInfo({
+        ...data,
+        dob: data.dob ? dayjs(data.dob).format("YYYY-MM-DD") : "",
+      });
+    }
+  }, [data, path, airplaneRes, airportRes]);
 
   const handleChange = (e) => {
     setInfo((prev) => ({ ...prev, [e.target.id]: e.target.value }));
@@ -143,8 +214,39 @@ const Edit = ({ inputs, title }) => {
 
         toast.success("Infomation airplane updated successfully");
       } else if (path === "airports") {
-        const res = await axiosInstance.put(`/api/${path}/${id}`, {...info});
+        await axiosInstance.put(`/api/${path}/${id}`, { ...info });
         toast.success("Infomation airport updated successfully");
+      } else if (path === "airplane-flights") {
+        if (!validate()) {
+          toast.error("Please fix the errors before submitting.");
+          return;
+        }
+
+        try {
+          const payload = {
+            departure_time: info.departure_time
+              ? dayjs(info.departure_time).format("YYYY-MM-DDTHH:mm:ss")
+              : null,
+            arrival_time: info.arrival_time
+              ? dayjs(info.arrival_time).format("YYYY-MM-DDTHH:mm:ss")
+              : null,
+            status: info.status,
+            airplane_id: parseInt(info.airplane_id) || null,
+            departure_airport_id: parseInt(info.departure_airport_id) || null,
+            arrival_airport_id: parseInt(info.arrival_airport_id) || null,
+          };
+
+          const response = await axiosInstance.put(`/api/${path}/${id}`, payload);
+
+          if (response.status === 200) {
+            toast.success("Flight information updated successfully!");
+            // Cập nhật lại thông tin trong state (nếu cần)
+            setInfo((prev) => ({ ...prev, ...payload }));
+          }
+        } catch (err) {
+          console.error("Error updating flight information:", err);
+          toast.error("Failed to update flight information.");
+        }
       }
 
       setTimeout(() => {
@@ -270,6 +372,51 @@ const Edit = ({ inputs, title }) => {
       } else if (info.iata_code.length !== 3) {
         newErrors.iata_code = "IATA code must be exactly 3 characters.";
       }
+    } else if (path === "airplane-flights") {
+      // Validate thời gian khởi hành
+      if (!info.departure_time || info.departure_time.trim() === "") {
+        newErrors.departure_time = "Departure time is required.";
+      }
+
+      // Validate thời gian hạ cánh
+      if (!info.arrival_time || info.arrival_time.trim() === "") {
+        newErrors.arrival_time = "Arrival time is required.";
+      } else if (info.departure_time && info.arrival_time <= info.departure_time) {
+        newErrors.arrival_time = "Arrival time must be after departure time.";
+      }
+
+      // Validate giá vé
+      if (!info.ticket_price || isNaN(info.ticket_price)) {
+        newErrors.ticket_price = "Ticket price is required and must be a valid number.";
+      } else if (info.ticket_price <= 0) {
+        newErrors.ticket_price = "Ticket price must be greater than 0.";
+      }
+
+      // Validate trạng thái
+      if (!info.status || info.status.trim() === "") {
+        newErrors.status = "Status is required.";
+      }
+
+      if (!info.ticket_class || info.ticket_class.trim() === "") {
+        newErrors.ticket_class = "Ticket class is required.";
+      }
+
+      // Validate máy bay
+      if (!info.airplane_id || isNaN(info.airplane_id)) {
+        newErrors.airplane_id = "Airplane is required.";
+      }
+
+      // Validate sân bay khởi hành
+      if (!info.departure_airport_id || isNaN(info.departure_airport_id)) {
+        newErrors.departure_airport_id = "Departure airport is required.";
+      }
+
+      // Validate sân bay đến
+      if (!info.arrival_airport_id || isNaN(info.arrival_airport_id)) {
+        newErrors.arrival_airport_id = "Arrival airport is required.";
+      } else if (info.departure_airport_id === info.arrival_airport_id) {
+        newErrors.arrival_airport_id = "Departure and arrival airports must be different.";
+      }
     }
 
     setErrors(newErrors);
@@ -289,7 +436,7 @@ const Edit = ({ inputs, title }) => {
           </button>
         </div>
         <div className="bottom">
-          {path === "airports" ? (
+          {path === "airports" || path === "airplane-flights" ? (
             <></>
           ) : (
             <>
@@ -307,7 +454,7 @@ const Edit = ({ inputs, title }) => {
           )}
           <div className="right">
             <form onSubmit={handleClick}>
-              {path === "airports" ? (
+              {path === "airports" || path === "airplane-flights" ? (
                 <></>
               ) : (
                 <>
@@ -326,58 +473,108 @@ const Edit = ({ inputs, title }) => {
                 </>
               )}
 
-              {inputs.map((input) => (
-                <div className="formInput" key={input.id}>
-                  <label>{input.label}</label>
-                  {input.type === "password" ? (
-                    <div className="password-container">
-                      <input
-                        type={showPasswords[input.id] ? "text" : "password"}
-                        id={input.id}
-                        value={info[input.id] || ""}
-                        onChange={handleChange}
-                        placeholder={input.placeholder}
-                      />
-                      <button
-                        type="button"
-                        className="toggle-password"
-                        onClick={() => togglePasswordVisibility(input.id)}
-                      >
-                        {showPasswords[input.id] ? <FaEyeSlash /> : <FaEye />}
-                      </button>
-                    </div>
-                  ) : input.type === "select" ? (
-                    <select
-                      id={input.id}
-                      value={info[input.id] || ""}
-                      onChange={handleChange}
-                    >
-                      {input.options.map((option) => (
-                        <option key={option.value} value={option.value}>
-                          {option.label}
-                        </option>
-                      ))}
-                    </select>
-                  ) : (
-                    <input
-                      onChange={handleChange}
-                      type={input.type}
-                      placeholder={input.placeholder}
-                      id={input.id}
-                      value={
-                        input.type === "date" && info[input.id]
-                          ? dayjs(info[input.id]).format("YYYY-MM-DD")
-                          : info[input.id] || ""
-                      }
-                    />
-                  )}
+              {path === "airplane-flights" ? (
+                <>
+                  {
+                    inputsState.map((input) => (
+                      <div className="formInput" key={input.id}>
+                        <label>{input.label}</label>
+                        {input.type === "select" ? (
+                          <select
+                            id={input.id}
+                            value={info[input.id] || ""}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select {input.label.toLowerCase()}</option>
+                            {input.options.map((option, index) => (
+                              <option key={option.value || index} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            onChange={handleChange}
+                            type={input.type}
+                            placeholder={input.placeholder}
+                            id={input.id}
+                            value={
+                              input.type === "date" && info[input.id]
+                                ? dayjs(info[input.id]).format("YYYY-MM-DD")
+                                : input.type === "datetime-local" && info[input.id]
+                                  ? dayjs(info[input.id]).format("YYYY-MM-DDTHH:mm")
+                                  : info[input.id] || ""
+                            }
+                          />
+                        )}
 
-                  {/* Hiển thị lỗi */}
-                  {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
-                </div>
-              ))}
+                        {/* Hiển thị lỗi */}
+                        {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
+                      </div>
+                    ))
+                  }
+                </>
+              ) : (
+                <>
+                  {
+                    inputs.map((input) => (
+                      <div className="formInput" key={input.id}>
+                        <label>{input.label}</label>
+                        {input.type === "password" ? (
+                          <div className="password-container">
+                            <input
+                              type={showPasswords[input.id] ? "text" : "password"}
+                              id={input.id}
+                              value={info[input.id] || ""}
+                              onChange={handleChange}
+                              placeholder={input.placeholder}
+                            />
+                            <button
+                              type="button"
+                              className="toggle-password"
+                              onClick={() => togglePasswordVisibility(input.id)}
+                            >
+                              {showPasswords[input.id] ? <FaEyeSlash /> : <FaEye />}
+                            </button>
+                          </div>
+                        ) : input.type === "select" ? (
+                          <select
+                            id={input.id}
+                            value={info[input.id] || ""}
+                            onChange={handleChange}
+                          >
+                            <option value="">Select {input.label}</option>
+                            {input.options.map((option) => (
+                              <option key={option.value} value={option.value}>
+                                {option.label}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <input
+                            onChange={handleChange}
+                            type={input.type}
+                            placeholder={input.placeholder}
+                            id={input.id}
+                            value={
+                              input.type === "date" && info[input.id]
+                                ? dayjs(info[input.id]).format("YYYY-MM-DD")
+                                : input.type === "datetime-local" && info[input.id]
+                                  ? dayjs(info[input.id]).format("YYYY-MM-DDTHH:mm")
+                                  : info[input.id] || ""
+                            }
+                          />
+                        )}
 
-              <button type="submit" className="btn-submit">Send</button>
+                        {/* Hiển thị lỗi */}
+                        {errors[input.id] && <span className="error-message">{errors[input.id]}</span>}
+                      </div>
+                    ))
+                  }
+                </>
+              )}
+
+              < button type="submit" className="btn-submit">Send</button>
             </form>
           </div>
         </div>
@@ -404,7 +601,7 @@ const Edit = ({ inputs, title }) => {
                 className="seat add-seat"
                 onClick={() => navigate(`/airplanes/${id}/seat/new`)}
               >
-                + Add Seat
+                +
               </div>
             </div>
 
@@ -422,7 +619,7 @@ const Edit = ({ inputs, title }) => {
           </div>
         )}
       </div>
-    </div>
+    </div >
   );
 };
 

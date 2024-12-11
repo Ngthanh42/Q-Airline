@@ -37,7 +37,7 @@ const Single = () => {
             <div className="editButton" onClick={() => navigate(`/${path}/edit/${id}`)}>Edit</div>
             <h1 className="title">Information</h1>
             <div className="item">
-              {path === "airports" ? (
+              {path === "airports" || path === "airplane-flights" ? (
                 <></>
               ) : (
                 <>
@@ -115,6 +115,44 @@ const Single = () => {
                     <div className="detailItem">
                       <span className="itemKey">IATA Code:</span>
                       <span className="itemValue">{info?.iata_code || "N/A"}</span>
+                    </div>
+                  </>
+                ) : path === "airplane-flights" ? (
+                  <>
+                    <h1 className="itemTitle">{info?.airplane_model
+                          ? `${info.airplane_model} (${info.registration_number})`
+                          : "N/A"}</h1>
+                    <div className="detailItem">
+                      <span className="itemKey">Departure Airport:</span>
+                      <span className="itemValue">{info?.departure_airport || "N/A"}</span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">Arrival Airport:</span>
+                      <span className="itemValue">{info?.arrival_airport || "N/A"}</span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">Departure Time:</span>
+                      <span className="itemValue">
+                        {info?.departure_time
+                          ? dayjs(info.departure_time).format("DD/MM/YYYY HH:mm")
+                          : "N/A"}
+                      </span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">Arrival Time:</span>
+                      <span className="itemValue">
+                        {info?.arrival_time
+                          ? dayjs(info.arrival_time).format("DD/MM/YYYY HH:mm")
+                          : "N/A"}
+                      </span>
+                    </div>
+                    <div className="detailItem">
+                      <span className="itemKey">Status:</span>
+                      <span className={`itemValue ${info?.status || ""}`}>
+                        {info?.status
+                          ? info.status.charAt(0).toUpperCase() + info.status.slice(1).toLowerCase()
+                          : "N/A"}
+                      </span>
                     </div>
                   </>
                 ) : (

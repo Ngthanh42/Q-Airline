@@ -41,7 +41,7 @@ export const userColumns = [
   {
     field: "role",
     headerName: "Role",
-    width: 70,
+    width: 100,
   },
 ];
 
@@ -101,7 +101,7 @@ export const airportColumns = [
   {
     field: "name",
     headerName: "Airport Name",
-    width: 200,
+    width: 250,
   },
   {
     field: "city",
@@ -122,26 +122,28 @@ export const airportColumns = [
 
 export const flightColumns = [
   {
-    field: "flight_id",
+    field: "id",
     headerName: "ID",
     width: 70,
   },
   {
     field: "airplane_id",
-    headerName: "Airplane ID",
-    width: 120,
+    headerName: "Airplane",
+    width: 200,
+    renderCell: (params) =>
+      `${params.row.airplane_model} (${params.row.airplane_registration})`,
   },
   {
     field: "departure_airport",
     headerName: "Departure Airport",
-    width: 200,
-    renderCell: (params) => params.row.departure_airport || "N/A", // Hiển thị tên sân bay khởi hành
+    width: 250,
+    renderCell: (params) => params.row.departure_airport || "N/A",
   },
   {
     field: "arrival_airport",
     headerName: "Arrival Airport",
-    width: 200,
-    renderCell: (params) => params.row.arrival_airport || "N/A", // Hiển thị tên sân bay đến
+    width: 250,
+    renderCell: (params) => params.row.arrival_airport || "N/A",
   },
   {
     field: "departure_time",
@@ -156,28 +158,18 @@ export const flightColumns = [
     renderCell: (params) => new Date(params.row.arrival_time).toLocaleString(),
   },
   {
-    field: "ticket_price",
-    headerName: "Price (USD)",
-    width: 120,
-    renderCell: (params) => {
-      const price = params.row.ticket_price;
-      return price !== undefined && price !== null
-        ? `$${price.toFixed(2)}`
-        : "N/A"; // Hiển thị "N/A" nếu giá trị không hợp lệ
-    },
-  },
-  {
     field: "status",
     headerName: "Status",
     width: 120,
     renderCell: (params) => {
-      const status = params.row.status;
+      const status = params.row.status || "";
       const statusColors = {
         Scheduled: "#4caf50",
         Delayed: "#ff9800",
         Canceled: "#f44336",
         Completed: "#2196f3",
       };
+  
       return (
         <span
           style={{
@@ -187,59 +179,13 @@ export const flightColumns = [
             borderRadius: "5px",
           }}
         >
-          {status}
+          {status
+            ? status.charAt(0).toUpperCase() + status.slice(1).toLowerCase()
+            : "Unknown"}
         </span>
       );
     },
-  },
-];
-
-export const hotelColumns = [
-  { field: "_id", headerName: "ID", width: 250 },
-  {
-    field: "name",
-    headerName: "Name",
-    width: 150,
-  },
-  {
-    field: "type",
-    headerName: "Type",
-    width: 100,
-  },
-  {
-    field: "title",
-    headerName: "Title",
-    width: 230,
-  },
-  {
-    field: "city",
-    headerName: "City",
-    width: 100,
-  },
-];
-
-export const roomColumns = [
-  { field: "_id", headerName: "ID", width: 70 },
-  {
-    field: "title",
-    headerName: "Title",
-    width: 230,
-  },
-  {
-    field: "desc",
-    headerName: "Description",
-    width: 200,
-  },
-  {
-    field: "price",
-    headerName: "Price",
-    width: 100,
-  },
-  {
-    field: "maxPeople",
-    headerName: "Max People",
-    width: 100,
-  },
+  },  
 ];
 
 export const notificationColumns = [
@@ -257,25 +203,56 @@ export const notificationColumns = [
 ];
 
 export const ticketColumns = [
-  { field: "_id", headerName: "ID", width: 70 },
-  {
-    field: "title",
-    headerName: "Title",
-    width: 230,
+  { field: "id", headerName: "ID", width: 100 },
+  { field: "customer_name", headerName: "Customer", width: 150 },
+  { field: "departure_airport", headerName: "Departure Airport", width: 250 },
+  { field: "arrival_airport", headerName: "Arrival Airport", width: 250 },
+  { field: "departure_time", headerName: "Departure Time", width: 190, 
+    renderCell: (params) => {
+      const bookingDate = new Date(params.row.departure_time);
+      const formattedDate = `${bookingDate.toLocaleDateString()} ${bookingDate.toLocaleTimeString()}`;
+      return formattedDate;
+    }, },
+  { field: "arrival_time", headerName: "Arrival Time", width: 190, 
+    renderCell: (params) => {
+      const bookingDate = new Date(params.row.arrival_time);
+      const formattedDate = `${bookingDate.toLocaleDateString()} ${bookingDate.toLocaleTimeString()}`;
+      return formattedDate;
+    }, },
+  { 
+    field: "booking_date", 
+    headerName: "Booking Date", 
+    width: 190, 
+    renderCell: (params) => {
+      const bookingDate = new Date(params.row.booking_date);
+      const formattedDate = `${bookingDate.toLocaleDateString()} ${bookingDate.toLocaleTimeString()}`;
+      return formattedDate;
+    },
   },
-  {
-    field: "content",
-    headerName: "Content",
-    width: 200,
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    width: 200,
-  },
-  {
-    field: "user",
-    headerName: "UserId",
-    width: 200,
+  { field: "price", headerName: "Price ($)", width: 100 },
+  { field: "seat_number", headerName: "Seat Number", width: 100 },
+  { 
+    field: "status", 
+    headerName: "Status", 
+    width: 150, 
+    renderCell: (params) => {
+      const statusColors = {
+        Confirmed: "#4caf50", // Green
+        Canceled: "#f44336", // Red
+      };
+      return (
+        <span
+          style={{
+            color: "#fff",
+            backgroundColor: statusColors[params.row.status] || "#757575", // Default color
+            padding: "5px 10px",
+            borderRadius: "5px",
+            textAlign: "center",
+          }}
+        >
+          {params.row.status}
+        </span>
+      );
+    },
   },
 ];

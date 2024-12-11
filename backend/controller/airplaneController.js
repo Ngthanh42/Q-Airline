@@ -399,7 +399,6 @@ export const createFlight = async (req, res) => {
         arrival_airport_id,
         departure_time,
         arrival_time,
-        ticket_price,
         status = "Scheduled"
     } = req.body;
 
@@ -411,16 +410,14 @@ export const createFlight = async (req, res) => {
                 arrival_airport_id,
                 departure_time,
                 arrival_time,
-                ticket_price,
                 status
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            ) VALUES (?, ?, ?, ?, ?, ?)`,
             [
                 airplane_id,
                 departure_airport_id,
                 arrival_airport_id,
                 departure_time,
                 arrival_time,
-                ticket_price,
                 status
             ]
         );
@@ -437,15 +434,22 @@ export const getFlights = async (req, res) => {
     try {
         const [flights] = await pool.query(`
             SELECT 
-                flight_id,
-                airplane_id,
-                departure_airport_id,
-                arrival_airport_id,
-                departure_time,
-                arrival_time,
-                ticket_price,
-                status
-            FROM flights
+                f.flight_id AS id,
+                f.airplane_id,
+                f.departure_time,
+                f.arrival_time,
+                f.status,
+                dep_airport.name AS departure_airport, -- Tên sân bay khởi hành
+                arr_airport.name AS arrival_airport,   -- Tên sân bay đến
+                a.model AS airplane_model,            -- Model máy bay
+                a.registration_number AS airplane_registration -- Số đăng ký máy bay
+            FROM flights f
+            JOIN airports dep_airport 
+                ON f.departure_airport_id = dep_airport.airport_id
+            JOIN airports arr_airport 
+                ON f.arrival_airport_id = arr_airport.airport_id
+            JOIN airplanes a 
+                ON f.airplane_id = a.airplane_id
         `);
 
         res.status(200).json(flights);
@@ -455,24 +459,66 @@ export const getFlights = async (req, res) => {
     }
 };
 
+// Danh sách chuyến bay của một máy bay cụ thể
+export const getFlightsByAirplaneId = async (req, res) => {
+    const { airplane_id } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            `SELECT 
+                f.flight_id AS id,
+                f.departure_time,
+                f.arrival_time,
+                TIMESTAMPDIFF(MINUTE, f.departure_time, f.arrival_time) AS duration_minutes,
+                f.status,
+                a1.name AS departure_airport,
+                a2.name AS arrival_airport,
+                ap.model AS airplane_model,
+                ap.registration_number AS airplane_registration_number
+            FROM flights f
+            JOIN airports a1 ON f.departure_airport_id = a1.airport_id
+            JOIN airports a2 ON f.arrival_airport_id = a2.airport_id
+            JOIN airplanes ap ON f.airplane_id = ap.airplane_id
+            WHERE f.airplane_id = ?`,
+            [airplane_id]
+        );
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: "No flights found for this airplane." });
+        }
+
+        res.status(200).json(rows);
+    } catch (error) {
+        console.error("Error fetching flights for airplane:", error);
+        res.status(500).json({ message: "Server error. Please try again later." });
+    }
+};
+
 // Thông tin chuyến bay cụ thể (lấy theo id)
 export const getFlightById = async (req, res) => {
-    const { id } = req.params;
+    const { flight_id } = req.params;
 
     try {
         const [flights] = await pool.query(`
             SELECT 
-                flight_id,
-                airplane_id,
-                departure_airport_id,
-                arrival_airport_id,
-                departure_time,
-                arrival_time,
-                ticket_price,
-                status
-            FROM flights
-            WHERE flight_id = ?
-        `, [id]);
+                f.flight_id,
+                f.departure_time,
+                f.arrival_time,
+                f.status,
+                a.model AS airplane_model,
+                a.registration_number,
+                da.name AS departure_airport,
+                da.city AS departure_city,
+                da.country AS departure_country,
+                aa.name AS arrival_airport,
+                aa.city AS arrival_city,
+                aa.country AS arrival_country
+            FROM flights f
+            JOIN airplanes a ON f.airplane_id = a.airplane_id
+            JOIN airports da ON f.departure_airport_id = da.airport_id
+            JOIN airports aa ON f.arrival_airport_id = aa.airport_id
+            WHERE f.flight_id = ?
+        `, [flight_id]);
 
         if (flights.length === 0) {
             return res.status(404).json({ message: "Flight not found." });
@@ -487,25 +533,57 @@ export const getFlightById = async (req, res) => {
 
 // Cập nhật thông tin chuyến bay
 export const updateFlight = async (req, res) => {
-    const { id } = req.params;
-    const { departure_time, arrival_time, status } = req.body;
+    const { flight_id } = req.params;
+
+    const {
+        departure_time,
+        arrival_time,
+        status,
+        airplane_id,
+        departure_airport_id,
+        arrival_airport_id,
+    } = req.body;
 
     try {
-        const [result] = await pool.query(
-            `UPDATE flights
-            SET departure_time = ?, arrival_time = ?, status = ?
-            WHERE flight_id = ?`,
-            [departure_time, arrival_time, status, id]
+        // Kiểm tra nếu flight tồn tại
+        const [existingFlight] = await pool.query(
+            "SELECT * FROM flights WHERE flight_id = ?",
+            [flight_id]
         );
-
-        if (result.affectedRows === 0) {
+        if (existingFlight.length === 0) {
             return res.status(404).json({ message: "Flight not found." });
         }
 
-        res.status(200).json({ message: "Flight updated successfully!" });
+        // Cập nhật thông tin
+        const [result] = await pool.query(
+            `UPDATE flights
+       SET 
+         departure_time = ?,
+         arrival_time = ?,
+         status = ?,
+         airplane_id = ?,
+         departure_airport_id = ?,
+         arrival_airport_id = ?
+       WHERE flight_id = ?`,
+            [
+                departure_time,
+                arrival_time,
+                status,
+                airplane_id,
+                departure_airport_id,
+                arrival_airport_id,
+                flight_id,
+            ]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(400).json({ message: "Update failed." });
+        }
+
+        res.status(200).json({ message: "Flight updated successfully." });
     } catch (error) {
         console.error("Error updating flight:", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(500).json({ message: "Server error." });
     }
 };
 
@@ -532,19 +610,27 @@ export const deleteFlight = async (req, res) => {
 // Thay đổi giờ khởi hành (delay) cho chuyến bay
 export const updateFlightDepartureTime = async (req, res) => {
     const { flight_id } = req.params;
-    const { new_departure_time } = req.body;
+    const { new_departure_time, new_arrival_time } = req.body;
 
     try {
         const [result] = await pool.query(
-            "UPDATE flights SET departure_time = ?, status = 'delayed' WHERE flight_id = ?",
-            [new_departure_time, flight_id]
+            `
+            UPDATE flights 
+            SET 
+                departure_time = ?, 
+                arrival_time = ?, 
+                status = 'Delayed' 
+            WHERE 
+                flight_id = ?
+            `,
+            [new_departure_time, new_arrival_time, flight_id]
         );
 
         if (result.affectedRows === 0) {
             return res.status(404).json({ message: "Flight not found" });
         }
 
-        res.status(200).json({ message: "Flight departure time updated successfully" });
+        res.status(200).json({ message: "Flight times updated successfully" });
     } catch (error) {
         console.error("Error updating flight departure time:", error);
         res.status(500).json({ message: "Server error" });

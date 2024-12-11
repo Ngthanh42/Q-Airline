@@ -8,7 +8,6 @@ In the fast-paced digital age, the Airplane Ticket Booking and Management System
 
 - **User Management**: Register, log in, and manage user profiles securely.
 - **Flight Search and Booking**: Search for flights based on various criteria, book tickets securely, and make payments through PCI-compliant gateways.
-- **QR Code Verification**: Generate and scan unique QR codes for each booked ticket for efficient verification at check-in or boarding gates.
 - **Admin Panel**: Manage flight listings, user information, and system configurations efficiently.
 - **Responsive Design**: Enjoy a seamless experience across different devices, including desktops, laptops, tablets, and smartphones.
 
@@ -47,15 +46,28 @@ npm install
 
 4. Set up environment variables:
    - Create a `.env` file in the root directory.
-   - Add environment variables for MongoDB connection, API keys, and other sensitive information.
+   - Add environment variables for MySQL connection, Cloudinary, and other sensitive information.
 
-5. Start the development server:
+5. Start the development frontend server:
 
 ```bash
 npm run dev
 ```
+And open your browser and visit `http://localhost:5173` to access the application.
 
-6. Open your browser and visit `http://localhost:5173` to access the application.
+6. Start the development backend server:
+
+```bash
+npx nodemon index.js
+```
+And open your browser and visit `http://localhost:5000` to access the application.
+
+7. Start the development admin server:
+
+```bash
+npm start
+```
+And open your browser and visit `http://localhost:3000` to access the application.
 
 ## Usage
 

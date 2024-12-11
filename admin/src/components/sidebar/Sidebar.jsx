@@ -50,6 +50,7 @@ const Sidebar = () => {
               <span>Dashboard</span>
             </li>
           </Link>
+
           <p className="title">LISTS</p>
           <Link to="/users" style={{ textDecoration: "none" }}>
             <li>
@@ -75,13 +76,13 @@ const Sidebar = () => {
               <span>Airport</span>
             </li>
           </Link>
+          <Link to="/tickets" style={{ textDecoration: "none" }}>
+            <li>
+              <AirplaneTicketIcon className="icon" />
+              <span>Tickets</span>
+            </li>
+          </Link>
           <p className="title">USEFUL</p>
-          <li>
-            <AirplaneTicketIcon className="icon" />
-            <Link to="/tickets" style={{ textDecoration: "none" }}>
-              <span>Tickets </span>
-            </Link>
-          </li>
           <li>
             <NotificationsNoneIcon className="icon" />
             <Link to="/notifications" style={{ textDecoration: "none" }}>

@@ -27,11 +27,11 @@ export const findUserById = async (id) => {
 };
 
 // Tạo người dùng mới
-export const createUser = async (fullName, email, hashedPassword, phone, address, country, dob, avatar) => {
+export const createUser = async (fullName, email, hashedPassword, phone, address, country, gender, dob, avatar) => {
     const [result] = await pool.query(
-        `INSERT INTO users (full_name, email, password_hash, phone_number, address, country, birth_date, avatar) 
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-        [fullName, email, hashedPassword, phone, address, country, dob || null, avatar || null]
+        `INSERT INTO users (full_name, email, password_hash, phone_number, address, country, gender, birth_date, avatar) 
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        [fullName, email, hashedPassword, phone || null, address || null, country || null, gender, dob || null, avatar || null]
     );
     return result.insertId;
 };

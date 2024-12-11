@@ -128,7 +128,7 @@ const Account = () => {
 
       setTimeout(() => {
         window.location.reload();
-      }, 3000);
+      }, 4000);
     } catch (err) {
       console.error("Lỗi khi tải lên ảnh:", err);
       toast.error("Đã xảy ra lỗi khi cập nhật người dùng!");
@@ -370,7 +370,7 @@ const Account = () => {
                   className="toggle-password"
                   onClick={() => togglePasswordVisibility("oldPassword")}
                 >
-                  {showPasswords.oldPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPasswords.oldPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
               {errors.oldPassword && (
@@ -394,7 +394,7 @@ const Account = () => {
                   className="toggle-password"
                   onClick={() => togglePasswordVisibility("newPassword")}
                 >
-                  {showPasswords.newPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPasswords.newPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
               {errors.newPassword && (
@@ -418,7 +418,7 @@ const Account = () => {
                   className="toggle-password"
                   onClick={() => togglePasswordVisibility("confirmPassword")}
                 >
-                  {showPasswords.confirmPassword ? <FaEyeSlash /> : <FaEye />}
+                  {showPasswords.confirmPassword ? <FaEye /> : <FaEyeSlash />}
                 </button>
               </div>
               {errors.confirmPassword && (
