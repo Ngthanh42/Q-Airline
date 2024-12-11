@@ -13,16 +13,16 @@ import Subscribe from './components/subscribers/subscribe';
 import Footer from './components/footer/footer';
 import SignIn from './components/auth/signin/signin';
 import SignUp from './components/auth/signup/signup';
-import AboutPage from './components/pages/about-us/about-us';
+
+import AboutPage from './components/pages/About/about_us';
+import Destinations from './components/pages/Destinations/destinations';
+import Seats from './components/pages/Seats/seats'
+import Offers from './components/pages/Offers/offers';
 
 import { AuthContext } from './components/context/AuthContext';
 import FlightsList from './components/pages/flight/flight-list';
 import AirplaneDetails from './components/pages/airplane/airplane-detail';
 
-import AboutPage from './components/pages/About/about_us';
-import Offers from './components/pages/Offers/offers';
-import Destinations from './components/pages/Destinations/destinations';
-import Seats from './components/pages/Seats/seats';
 
 const App = () => {
   const ProtectedRoute = ({ children }) => {
@@ -54,11 +54,41 @@ const App = () => {
           }
         />
 
-        <Route path="/offers" element={<Offers />} />
-        <Route path="/destinations" element={<Destinations />} />
-        <Route path="/seats" element={<Seats />} />
+        <Route 
+          path="/destinations" 
+          element={
+            <>
+              <Navbar />
+              <Destinations />
+              <Footer />
+            </>
+          } 
+        />
+
         <Route
-          path="/about-us"
+          path="/seats"
+          element={
+            <>
+              <Navbar />
+              <Seats />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/offers"
+          element={
+            <>
+              <Navbar />
+              <Offers />
+              <Footer />
+            </>
+          }
+        />
+
+        <Route
+          path="/about_us"
           element={
             <>
               <Navbar />

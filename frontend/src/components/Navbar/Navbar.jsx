@@ -7,6 +7,8 @@ import { AiOutlineGlobal } from 'react-icons/ai';
 import { CgMenuGridO } from 'react-icons/cg';
 import { FaRegBell } from "react-icons/fa";
 
+import Search from "../search/search";
+
 import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
@@ -41,6 +43,16 @@ const Navbar = () => {
 
     const toggleDropdown = () => {
         setShowDropdown((prev) => !prev);
+    };
+
+    const scrollToOffers = () => {
+        const offersSection = Search;
+        if (offersSection) {
+          offersSection.scrollIntoView({ 
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
     };
 
     return (

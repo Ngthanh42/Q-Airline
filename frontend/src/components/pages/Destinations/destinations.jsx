@@ -11,28 +11,28 @@ const destinationsData = [
       id: 1,
       name: "Tokyo, Japan",
       description: "A vibrant metropolis blending ultra-modern technology with traditional culture.",
-      image: "./images/tokyo.jpg",
+      image: "./public/tokyo2.jpg",
       coordinates: { lat: 35.6762, lng: 139.6503 }
     },
     {
       id: 2,
       name: "Paris, France", 
       description: "The city of love, art, and iconic landmarks like the Eiffel Tower.",
-      image: "./images/paris.jpg",
+      image: "./public/paris2.jpg",
       coordinates: { lat: 48.8566, lng: 2.3522 }
     },
     {
       id: 3,
       name: "New York, USA",
       description: "The bustling city that never sleeps, home to countless iconic attractions.",
-      image: "./images/newyork.jpg",
+      image: "./public/newyork.jpg",
       coordinates: { lat: 40.7128, lng: -74.0060 }
     },
     {
       id: 4,
       name: "Sydney, Australia",
       description: "A stunning coastal city known for its iconic Opera House and beautiful harbors.",
-      image: "./images/sydney.jpg",
+      image: "./public/sydney.jpg",
       coordinates: { lat: -33.8688, lng: 151.2093 }
     }
   ];

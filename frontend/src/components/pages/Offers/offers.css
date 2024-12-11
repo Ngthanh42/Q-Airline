@@ -1,0 +1,121 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+.airline-offers-container {
+  font-family: 'Inter', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+}
+
+.offers-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1a2f4a;
+}
+
+.offers-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-top: 10rem;
+    color: #2c3e50;
+}
+
+.offers-header p {
+    margin-top: 1rem;
+}
+  
+.offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.offer-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  
+.offer-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.offer-card-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: #2c3e50;
+}
+  
+.offer-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    color: #47617b;
+    margin-right: 1rem;
+}
+  
+.offer-card-header h2 {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.offer-destination {
+    font-size: 1.1rem;
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+}
+  
+.offer-price-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+  
+.offer-price {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2ecc71;
+}
+
+.offer-discount {
+    background-color: #e74c3c;
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+  
+.offer-description {
+    color: #34495e;
+    margin-bottom: 1rem;
+}
+  
+.offer-validity {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+}
+
+.offer-button {
+    background: linear-gradient(90deg, #47617b, #2c3e50);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-top: auto;
+}
+  
+.offer-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(27, 83, 120, 0.4);
+}
