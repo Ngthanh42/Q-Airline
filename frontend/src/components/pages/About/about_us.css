@@ -1,174 +1,25 @@
-/* Global Container */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 5rem;
-  }
-  
-  /* Header Styles */
-  .header {
-    text-align: center;
-    margin-bottom: 3em;
-  }
-  
-  .title {
+.about-container {
+  font-family: 'Inter', sans-serif;
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.about-header {
+  text-align: center;
+  color: #1a2f4a;
+}
+
+.about-header h1 {
     font-size: 2.5rem;
-    color: #1e40af;
-    font-weight: bold;
-    margin-top: 7rem;
-    margin-bottom: 1rem;
-  }
-  
-  .subtitle {
-    font-size: 1.25rem;
-    color: #6b7280;
-    max-width: 800px;
-    margin: 0 auto;
-  }
-  
-  /* Content Grid */
-  .content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 3rem;
-  }
-  
-  /* Card Styles */
-  .card {
-    background-color: white;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    border-radius: 0.75rem;
-    padding: 1.5rem;
-  }
-  
-  .card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-  
-  .card-header .icon {
-    font-size: 2.5rem;
-    margin-right: 1rem;
-  }
-  
-  .card-title {
-    font-size: 1.5rem;
-    color: #1f2937;
     font-weight: 600;
-  }
-  
-  .card-content p {
-    color: #4b5563;
-    margin-bottom: 1rem;
-    line-height: 1.6;
-  }
-  
-  /* Mission Section */
-  .mission-description {
-    color: #4b5563;
-    margin-bottom: 1rem;
-  }
-  
-  .mission-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .mission-list li {
-    display: flex;
-    align-items: center;
-    color: #4b5563;
-    margin-bottom: 0.5rem;
-  }
-  
-  .check-icon {
-    color: #10b981;
-    margin-right: 0.5rem;
-  }
-  
-  /* Achievements Section */
-  .achievements-section {
-    background-color: #dbeafe;
-    border-radius: 0.75rem;
-    padding: 2rem;
-    text-align: center;
-    margin-bottom: 3rem;
-  }
-  
-  .achievements-grid {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 1.5rem;
-  }
-  
-  .achievement-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .achievement-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .achievement-number {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #1e40af;
-  }
-  
-  .achievement-label {
-    color: #6b7280;
-  }
-  
-  .achievements-description {
-    max-width: 800px;
-    margin: 0 auto;
-    color: #4b5563;
-  }
-  
-  /* Call to Action */
-  .cta-section {
-    text-align: center;
-  }
-  
-  .cta-title {
-    font-size: 1.5rem;
-    color: #1f2937;
-    font-weight: 600;
-    margin-bottom: 1rem;
-  }
-  
-  .cta-description {
-    color: #4b5563;
-    max-width: 600px;
-    margin: 0 auto 1.5rem;
-  }
-  
-  .cta-button {
-    background-color: #2563eb;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 9999px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .cta-button:hover {
-    background-color: #1d4ed8;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .content-grid {
-      grid-template-columns: 1fr;
-    }
-  
-    .achievements-grid {
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-  }
+    margin-top: 10rem;
+    color: #2c3e50;
+}
+
+.about-header p {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+}

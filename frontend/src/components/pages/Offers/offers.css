@@ -2,15 +2,15 @@
 
 .airline-offers-container {
   font-family: 'Inter', sans-serif;
-  max-width: 1200px;
+  max-width: 1450px;
   margin: 0 auto;
   padding: 2rem;
   background-color: #ffffff;
+  overflow: hidden;
 }
 
 .offers-header {
   text-align: center;
-  margin-bottom: 2rem;
   color: #1a2f4a;
 }
 
@@ -22,53 +22,109 @@
 }
 
 .offers-header p {
+    margin-top: 1.5rem;
+    font-size: 1.2rem;
+}
+
+.offers-carousel {
     margin-top: 1rem;
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
   
-.offers-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
+.offers-wrapper {
+    position: relative;
+    width: 85%;
+    max-width: 1500px;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .offer-card {
+    position: absolute;
+    width: 360px;
     background-color: white;
     border-radius: 12px;
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    display: flex;
-    flex-direction: column;
-  }
+    transition: all 0.5s ease;
+    opacity: 0;
+    transform: scale(0.5);
+    pointer-events: none;
+}
+
+.offer-card.active-left {
+    opacity: 0.6;
+    transform: scale(0.85) translateX(-450px);
+    z-index: 5;
+}
+
+.offer-card.active-right {
+    opacity: 0.6;
+    transform: scale(0.85) translateX(450px);
+    z-index: 5;
+}
+
+.offer-card.active-center {
+    opacity: 1;
+    transform: scale(1) translateY(-10px);
+    z-index: 5;
+    pointer-events: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
   
 .offer-card:hover {
-    transform: translateY(-10px);
+    transform: translateY(-3px);
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
+.offer-card.hidden {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  
+.offer-image {
+    margin-left: 15px;
+    width: 92%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px 10px 10px 10px;
+    margin-bottom: 1rem;
+}
+
 .offer-card-header {
+    padding: 0.2rem;
+    background-color: #2c3e50;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     display: flex;
     align-items: center;
-    margin-bottom: 1rem;
-    color: #2c3e50;
-}
-  
-.offer-icon {
-    width: 2.5rem;
-    height: 2.5rem;
-    color: #47617b;
-    margin-right: 1rem;
+    justify-content: center;
+    margin-bottom: 0.9rem;
+    color: white;
 }
   
 .offer-card-header h2 {
-    font-size: 1.3rem;
-    font-weight: 600;
+    font-size: 1.2rem;
+    margin: 0;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: white;
+}
+
+.offer-card-body {
+    padding: 1rem;
 }
 
 .offer-destination {
-    font-size: 1.1rem;
-    color: #7f8c8d;
-    margin-bottom: 0.5rem;
+    font-size: 1.4rem;
+    color: #525d5e;
+    margin-bottom: 1rem;
+    text-align: left;
 }
   
 .offer-price-section {
@@ -87,35 +143,84 @@
 .offer-discount {
     background-color: #e74c3c;
     color: white;
-    padding: 0.3rem 0.6rem;
+    padding: 0.4rem 0.6rem;
     border-radius: 6px;
     font-size: 0.9rem;
+    font-weight: 700;
 }
   
 .offer-description {
     color: #34495e;
-    margin-bottom: 1rem;
+    margin-bottom: 0.7rem;
+    margin-top: 2.5rem;
+    text-align: left;
 }
   
 .offer-validity {
     font-size: 0.9rem;
-    color: #7f8c8d;
+    color: #737e7e;
     margin-bottom: 1rem;
+    text-align: left;
 }
 
 .offer-button {
     background: linear-gradient(90deg, #47617b, #2c3e50);
     color: white;
     border: none;
+    font-size: 0.9rem;
+    font-weight: 400;
     padding: 0.8rem 1.5rem;
     border-radius: 8px;
-    font-weight: 600;
     cursor: pointer;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     margin-top: auto;
+    margin-left: 7.8rem;
+    margin-bottom: 0.8rem;
 }
   
 .offer-button:hover {
     transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(27, 83, 120, 0.4);
+}
+
+.carousel-control {
+    background-color: rgba(52, 152, 219, 0.1);
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.carousel-control:hover {
+    background-color: rgba(52, 152, 219, 0.2);
+}
+  
+.offer-indicators {
+    position: absolute;
+    bottom: -1px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+}
+  
+.indicator {
+    width: 7px;
+    height: 7px;
+    background-color: #bdc3c7;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+.indicator.active {
+    background-color: #3498db;
+    width: 20px;
+    border-radius: 5px;
 }

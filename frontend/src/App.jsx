@@ -14,7 +14,7 @@ import Footer from './components/footer/footer';
 import SignIn from './components/auth/signin/signin';
 import SignUp from './components/auth/signup/signup';
 
-import AboutPage from './components/pages/About/about_us';
+import About from './components/pages/About/about_us';
 import Destinations from './components/pages/Destinations/destinations';
 import Seats from './components/pages/Seats/seats'
 import Offers from './components/pages/Offers/offers';
@@ -22,7 +22,6 @@ import Offers from './components/pages/Offers/offers';
 import { AuthContext } from './components/context/AuthContext';
 import FlightsList from './components/pages/flight/flight-list';
 import AirplaneDetails from './components/pages/airplane/airplane-detail';
-
 
 const App = () => {
   const ProtectedRoute = ({ children }) => {
@@ -92,7 +91,7 @@ const App = () => {
           element={
             <>
               <Navbar />
-              <AboutPage />
+              <About />
               <Footer />
             </>
           }

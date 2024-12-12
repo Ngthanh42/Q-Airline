@@ -7,21 +7,21 @@ const seatData = [
     class: 'Economy Class',
     price: '$100',
     location: 'Rows 20-35',
-    image: 'bangkok.jpg',
+    image: 'economy_class.png',
     features: ['Standard seat', 'Basic comfort', 'Standard amenities']
   },
   {
     class: 'Business Class',
     price: '$800',
     location: 'Rows 1-5',
-    image: 'bangkok.jpg',
+    image: 'bussiness_class.jpg',
     features: ['Wide seats', 'Fully flat beds', 'Gourmet dining']
   },
   {
     class: 'First Class',
     price: '$1,500',
     location: 'Exclusive front section',
-    image: 'bangkok.jpg',
+    image: 'first_class.jpg',
     features: ['Private suite', 'Personal butler', 'Luxury experience']
   }
 ];

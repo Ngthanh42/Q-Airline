@@ -40,7 +40,7 @@ const destinationsData = [
   // Map container style
   const mapContainerStyle = {
     width: '100%',
-    height: '650px'
+    height: '660px'
   };
 
   const Destinations = () => {
@@ -93,15 +93,19 @@ const destinationsData = [
               </GoogleMap>
             </LoadScript>
         </div>       
-  
-        {/* Call to Action */}
-        <div className="destinations-cta">
-          <h3>Ready to Explore?</h3>
+      </div>
+
+      {/* Call to Action */}
+      <div className="cta-section">
+        <div className="call-to-action">
+          <h2>Ready to Explore?</h2>
           <p>Book your next adventure with QAirline and discover these incredible destinations.</p>
+        </div>
+        <div className="book-flight-section">
           <button className="book-flight-btn">Book Now</button>
         </div>
-      </div>
-    </div>  
+      </div>   
+    </div>
   );
 };
   
