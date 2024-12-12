@@ -1,8 +1,8 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import react from 'eslint-plugin-react'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
+import js from '@eslint/js';
+import globals from 'globals';
+import react from 'eslint-plugin-react';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
 
 export default [
   { ignores: ['dist'] },
@@ -11,13 +11,14 @@ export default [
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
+      parser: '@babel/eslint-parser', // Đảm bảo hỗ trợ Babel và JSX
       parserOptions: {
         ecmaVersion: 'latest',
         ecmaFeatures: { jsx: true },
         sourceType: 'module',
       },
     },
-    settings: { react: { version: '18.3' } },
+    settings: { react: { version: 'detect' } }, // Phát hiện phiên bản React tự động
     plugins: {
       react,
       'react-hooks': reactHooks,
@@ -33,19 +34,15 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
-      'import/no-unresolved': 'off', // Bỏ qua lỗi import không xác định
+      'import/no-unresolved': 'error', // Kích hoạt lỗi nếu import không đúng
       'import/extensions': [
         'error',
         'ignorePackages',
         {
           js: 'never',
           jsx: 'never',
-          mp4: 'always',
-          jpg: 'always',
-          jpeg: 'always',
-          png: 'always',
         },
       ],
     },
   },
-]
+];

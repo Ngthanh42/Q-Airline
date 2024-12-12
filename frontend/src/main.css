@@ -8,12 +8,12 @@
 }
 
 :root {
-  --PrimaryColor: hsl(225, 50%, 48%);
-  --SecondaryColor: hsl(180, 17%, 95%);
+  --PrimaryColor: hsl(192, 97%, 24%);
+  --SecondaryColor:hsl(193, 94%, 50%);
   --colorOne: hsl(15, 74%, 70%);
   --colorTwo: hsl(28, 100%, 82%);
   --HoverColor: hsl(225, 56%, 59%);
-  --whiteColor: hsl(0, 0%, 100%);
+  --whiteColor: hsl(201, 76%, 70%);
   --blackColor: hsl(0, 0%, 12%);
   --textColor: hsl(240, 1%, 48%);
   --borderColor: hsl(0, 0%, 83%);
@@ -170,11 +170,32 @@ h2 {
     border: 3px solid var(--whiteColor);
     transition: 0.4s ease-in-out;
   }
-  .navBar .navBarTwo .navBarMenu .menu {
-    flex-direction: column;
-    gap: 0.5rem;
+  .navBarMenu .menu {
+    display: flex; /* Hiển thị các mục menu theo chiều ngang */
+    justify-content: center; /* Canh giữa các mục menu */
+    gap: 1rem; /* Khoảng cách giữa các mục menu */
+    list-style: none; /* Xóa chấm tròn của ul */
+    padding: 0;
+    margin: 0;
+}
+
+/* Menu items styled as buttons */
+.navBarMenu .listItem {
+    background-color: var(--PrimaryColor); /* Màu nền nút */
+    color: var(--whiteColor); /* Màu chữ */
+    padding: 0.5rem 1.5rem; /* Khoảng cách bên trong nút */
+    border-radius: 20px; /* Bo tròn góc nút */
+    font-weight: 600; /* Đậm chữ */
+    text-transform: uppercase; /* Chuyển chữ hoa */
     text-align: center;
-  }
+    cursor: pointer;
+    transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi mượt */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng cho nút */
+    border: none;
+    display: inline-block;
+    text-decoration: none;
+}
+
   .navBar .navBarTwo .navBarMenu .menu .listItem a {
     padding: 0.5rem 0;
     cursor: pointer;

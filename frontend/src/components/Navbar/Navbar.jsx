@@ -50,8 +50,14 @@ const Navbar = () => {
 
             <div className={noBg}>
                 <div className="logoDiv">
-                    <img src="/logo.png" alt="" className="Logo" />
-                </div>
+                   <div class="logoBlock">
+                    <a href="/home">
+                    <img src="\logo QAirLine.png" alt="logo" className="Logo" />
+                    </a>
+                    <div class="logoSlogan">Enjoy every trip</div>
+                 </div>
+                <div class="logoName">QAirLine</div>
+            </div>
 
                 <div className={active}>
                     <ul className="menu flex">
